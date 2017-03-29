@@ -1,7 +1,7 @@
 function [table1, tableTest1, tableTrain, tableTest2] = getDataTable()
-    datatest1 = getDataset('datatest.txt');
-    datatraining = getDataset('datatraining.txt');
-    datatest2 = getDataset('datatest2.txt');
+    datatest1 = getDataset('data\datatest.txt');
+    datatraining = getDataset('data\datatraining.txt');
+    datatest2 = getDataset('data\datatest2.txt');
 
     dates = [datatest1.Date; datatraining.Date; datatest2.Date];
     temp = [datatest1.Temperature; datatraining.Temperature; datatest2.Temperature];
