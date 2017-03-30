@@ -1,9 +1,36 @@
+nodes = [25, 30,35,40];
+spread_coefitients = [0.8, 0.9];
+reps = 1;
+
+s = length(nodes) * length(spread_coefitients);
+mean_mse = zeros(2, s);
+mean_train_errors = zeros(2, s);
+mean_test_errors = zeros(2, s);
+
+count = 0;
+
+for hiddenLayerSize = nodes
+for spread_coef = spread_coefitients
+
+fprintf('Hidden Nodes = %i; spread = %d * max distance', hiddenLayerSize, spread_coef)
+
+MSEs = zeros(2,reps);
+train_errors = zeros(2,reps);
+test_errors = zeros(2,reps);
+
+for i=1:reps
+
 N = size(x,2);
 perm_idx = randperm(N);
-X1 = x(:, perm_idx(1:(N*75/100)));
-D1 = t(:, perm_idx(1:(N*75/100)));
-X2 = x(:, perm_idx((N*75/100)+1:end));
-D2 = t(:, perm_idx((N*75/100)+1:end));
+
+x2 = mapstd(x);
+x1 = processpca(x2, 0.02);
+
+training_set_part = 75;
+X1 = x1(:, perm_idx(1:(N*training_set_part/100)));
+D1 = t(:, perm_idx(1:(N*training_set_part/100)));
+X2 = x1(:, perm_idx((N*training_set_part/100)+1:end));
+D2 = t(:, perm_idx((N*training_set_part/100)+1:end));
 
 % 1. Select random points from the data to act as centres of the basis functions.
 % You can use the function randsample() to select a random sample from the
@@ -11,7 +38,7 @@ D2 = t(:, perm_idx((N*75/100)+1:end));
 N = size(X1,2);             % calculate number of data points
 
 
-m1 = 50;    % calculate number of centres
+m1 = hiddenLayerSize;    % calculate number of centres
 sample = randsample(N,m1);  % generate m1 random numbers
 [~,c] = kmeans(X1',m1);     % sample m1 points from N as centres
 c = c';
@@ -41,7 +68,7 @@ dc = dist(N+1:end,N+1:end); % extract the section with distances
 % nodes. The response from each RBF node to each data point depends on the distance
 % between the node centre and the data point. The operation dist.*dist squares all these
 % distances. The calculation of F is the exp() function applied to each element of the matrix.
-dmax = max(max(dc)); % find the maximum of these
+dmax = spread_coef * max(max(dc)); % find the maximum of these
 F = exp((-m1/(dmax*dmax))*(distance.^2)); % using these distances, calculate the
                                           % response from each centre
  
@@ -81,9 +108,25 @@ Dcalc = F2*W; % calculated outputs based on F2 and W
 Dthresh = Dcalc > 0.5; % and compare
 MSE2 = sum((D2 - Dcalc').^2)/numel(D2)
 
-plotconfusion([D1, D2], [Dclass', Dthresh']);
+plotconfusion(D1, Dclass', 'Training', D2, Dthresh', 'Test');
+
 % plotconfusion([D2], [Dthresh']);
 
+MSEs(:,i) =  [MSE, MSE2];
 
+temp = D1-Dclass';
+train_errors(:,i) = [sum(temp(temp>0))*100/numel(temp), abs(sum(temp(temp<0)))*100/numel(temp)];
+
+temp = D2-Dthresh';
+test_errors(:,i) = [sum(temp(temp>0))*100/numel(temp), abs(sum(temp(temp<0)))*100/numel(temp)];
+
+end;
+count = count+1;
+mean_mse(:, count) = mean(MSEs,2);
+mean_train_errors(:, count) = mean(train_errors, 2);
+mean_test_errors(:, count) = mean(test_errors, 2);
+
+end;
+end;
 % 8. Repeat the process for different random centres (basis functions) and numbers of
 % centres. How does the classification ability of the network vary?
