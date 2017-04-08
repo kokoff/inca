@@ -1,0 +1,20 @@
+figure; 
+subplot(1,2,1);
+plot(nodes, mtr.err_diff, ...
+    nodes, mtr.err0 + mtr.err1);
+hold on;
+h=errorbar(nodes, mtr.err_diff, mtr.std_err_diff  ,'+b'); set(h,'linestyle','none')
+legend('Difference', 'Total', 'Diff Std')
+xlabel('Number of hidden nodes');
+ylabel('% errors')
+
+subplot(1,2,2);
+bar(nodes, [mtr.err0 ; mtr.err1]')
+hold on;
+h=errorbar(nodes - 0.150, mtr.err0, mtr.std_err0  ,'+m'); set(h,'linestyle','none')
+hold on;
+h=errorbar(nodes + 0.150, mtr.err1, mtr.std_err1  ,'+m'); set(h,'linestyle','none')
+legend('Class0 err', 'Class1 err', 'Standart Deviation')
+xlabel('Number of hidden nodes');
+ylabel('% errors')
+

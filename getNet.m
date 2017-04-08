@@ -24,9 +24,9 @@ net.trainParam.goal = 0.0;
 
 % Choose Input and Output Pre/Post-Processing Functions
 % For a list of all processing functions type: help nnprocess
-net.input.processFcns = {'removeconstantrows','mapstd', 'processpca'};
+net.input.processFcns = {'removeconstantrows','mapstd'};
 net.output.processFcns = {'removeconstantrows','mapstd'};
-net.inputs{1}.processParams{3}.maxfrac = 0.02;
+%net.inputs{1}.processParams{3}.maxfrac = 0.02;
 
 % Setup Division of Data for Training, Validation, Testing
 % For a list of all data division functions type: help nndivide
@@ -44,7 +44,7 @@ end
 % Choose a Performance Function
 % For a list of all performance functions type: help nnperformance
 net.performFcn = 'mse';  % Cross-Entropy
-net.performParam.regularization = 0.2;
+net.performParam.regularization = 0.0;
 
 % Choose Plot Functions
 % For a list of all plot functions type: help nnplot

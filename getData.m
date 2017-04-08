@@ -1,4 +1,8 @@
-function [table1, tableTest1, tableTrain, tableTest2] = getDataTable()
+    [dataTable, ~, ~, ~] = getDataTable();
+    x = dataTable{:,{'Temperature','Humidity','Light','CO2','HumidityRatio'}}';
+    t = dataTable{:, {'Occupancy'}}';
+    
+ function [table1, tableTest1, tableTrain, tableTest2] = getDataTable()
     datatest1 = getDataset('data\datatest.txt');
     datatraining = getDataset('data\datatraining.txt');
     datatest2 = getDataset('data\datatest2.txt');

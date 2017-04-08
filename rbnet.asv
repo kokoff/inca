@@ -1,18 +1,14 @@
-%% Set parameters of the RBF network
+% Set parameters of the RBF network
 % 1. Center selection algorithm - kmeans = 1 for kmeans algorithm; random
 % center selection otherwise
 % 2. Number of centers/hidden nodes - 
-% 3. Scaling coefficient for the standard deviation of each hidden layer 
-% neuron - if coefficient = 1, use maximum distance between centers. 
-% 4. Input data matrix
-% 5. Target class vector
-use_kmeans = use_kmeans;
-m1 = m1;       % number of centres
-std_coef = std_coef;
-x = x;
-t = t;
+% 3. Scaling coefficient for the standard - if coefficient = 1, use maximum
+% distance between centers. 
+use_kmeans = 1;
+m1 = hiddenLayerSize;       % number of centres
+std_coef = spread_coef;
 
-%% Train and evaluate Network
+
 % 1. Preprocess inputs
 x1 = mapstd(x);
 x2 = processpca(x1, 0.02);
@@ -30,8 +26,8 @@ D2 = t(:, perm_idx((N*training_set_part/100)+1:end));
 
 
 % 3. Select centers using either Kmeans algorithm or randomly select points from data set.
-if use_kmeans
-    [~,c] = kmeans(X1',m1);     % find m1 points as centres
+if use_kmeans == 1
+    [~,c] = kmeans(X1',m1);     % sample m1 points from N as centres
     c = c';
 else
     N = size(X1,2);             % calculate number of data points
@@ -58,7 +54,8 @@ dc = dist(N+1:end,N+1:end); % extract the section with distances
 % standard deviation of the basis functions.
 % The matrix ‘dc’ will contain the distance from every centre (in rows) to every other centre (in
 % columns). 
-dmax = std_coef * max(max(dc)); % find the maximum of these
+dmax = coefficient * max(max(dc)); % find the maximum of these
+
 
 % 6. Calculate the matrix F composed of the individual basis functions responses to each
 % data point.
@@ -82,7 +79,7 @@ W = pF * D1'; % use pF instead of F-1 to calculate the weights
 % output to turn the low responses into a ‘no classification’.
 Dcalc = F*W;            % calculated outputs based on F and W
 Dclass = Dcalc > 0.5;   % and compare to find the bigger output
-MSE1 = sum((D1 - Dcalc').^2)/numel(D1);
+MSE = sum((D1 - Dcalc').^2)/numel(D1);
 
 
 % 9. Evaluate performance on a separate set of data.

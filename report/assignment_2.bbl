@@ -1,0 +1,28 @@
+\begin{thebibliography}{1}
+
+\bibitem{Arthur2007}
+David Arthur and Sergei Vassilvitskii.
+\newblock K-means++: The advantages of careful seeding.
+\newblock In {\em Proceedings of the Eighteenth Annual ACM-SIAM Symposium on
+  Discrete Algorithms}, SODA '07, pages 1027--1035, Philadelphia, PA, USA,
+  2007. Society for Industrial and Applied Mathematics.
+
+\bibitem{Candanedo2016}
+Luis~M. Candanedo and Véronique Feldheim.
+\newblock Accurate occupancy detection of an office room from light,
+  temperature, humidity and \{CO2\} measurements using statistical learning
+  models.
+\newblock {\em Energy and Buildings}, 112:28 -- 39, 2016.
+
+\bibitem{Lloyd82}
+Stuart~P. Lloyd.
+\newblock Least squares quantization in pcm.
+\newblock {\em IEEE Transactions on Information Theory}, 28:129--137, 1982.
+
+\bibitem{Zhou1998}
+Ping Zhou and Jim Austin.
+\newblock {\em A Binary Correlation Matrix Memory k-NN Classifier}, pages
+  251--256.
+\newblock Springer London, London, 1998.
+
+\end{thebibliography}
