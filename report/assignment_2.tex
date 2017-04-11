@@ -23,7 +23,7 @@
 \usepackage{tikz}
 %\usetikzlibrary{...}
 \usepackage{standalone}
-
+\usepackage{subcaption}
 
 \begin{document}
 %Header-Make sure you update this information!!!!
@@ -93,7 +93,7 @@ In figure \ref{fig:plotmatrix} the MATLAB $gplotmatrix$ function is used to plot
 \begin{figure}[h]
   \caption{Plot matrix}
   \centering
-    \includegraphics[width=1\textwidth]{Plotmatrix.png}
+    \includegraphics[width=1\textwidth]{../figures/plotmatrix.png}
     \label{fig:plotmatrix}
 \end{figure}
 
@@ -102,7 +102,7 @@ There seems to be a big correlation between Hummidity and HummidityRatio, which 
 \begin{figure}[h]
   \caption{Eigenvalues and percent contribution to overall variance of each principal components}
   \centering
-    \includegraphics[width=1\textwidth]{../eigenvalues.png}
+    \includegraphics[width=1\textwidth]{../figures/eigenvalues.png}
     \label{fig:eigenvalues}
 \end{figure}
 
@@ -111,7 +111,7 @@ Furthermore, looking at figure \ref{fig:pca_plotmatrix} we see that the distribu
 \begin{figure}[h]
   \caption{Plot matrix of principal components}
   \centering
-    \includegraphics[width=0.5\textwidth]{../pca_plotmatrix.png}
+    \includegraphics[width=0.5\textwidth]{../figures/pca_plotmatrix.png}
     \label{fig:pca_plotmatrix}
 \end{figure}
 
@@ -145,7 +145,7 @@ In the end, preprocessing of the input data consist of normalising variances of 
 %You should also indicate how you implemented it. This could be brief if
 %you have used MATLAB defaults, for example.
 \subsubsection*{Inputs}
-Inputs are preprocessed before they are presented to the network. The data set is split into a training set and a test set with ratio 75\%/25\%.
+Inputs are preprocessed before they are presented to the network. The data set is then randomly split into a training set and a test set with ratio 75\%/25\%.
 
 \subsubsection*{Input Layer}
 The input layer distributes inputs, after preprocessing, to each neuron in the hidden layer. The size of the input layer is therefore the size of the input vector $N=4$ (after PCA). It is fully connected to the hidden layer.
@@ -160,7 +160,7 @@ There is a single hidden layer fully connected to the output layer. The optimal 
 \label{eq:rbf}
 \end{equation}
 
-Where $m$ is the number of hidden neurons (number of centres), $d_{max}$ is the maximum distance between centres, $\epsilon$ is a parameter used to vary the spread of the Gaussian ($0<\epsilon<2$) and $\boldsymbol{c_i}$ is the center vector of neuron $i$. The centres for each hidden layer neuron are found using a k-means clustering algorithm. The number of centres $\boldsymbol(c_i)$ and slandered deviation parameter $\epsilon$ were found through experimentation.
+Where $m$ is the number of hidden neurons (number of centres), $d_{max}$ is the maximum distance between centres, $\epsilon$ is a parameter used to vary the spread of the Gaussian ($0<\epsilon<2$) and $\boldsymbol{c_i}$ is the center vector of neuron $i$. The centres for each hidden layer neuron are found using a k-means clustering algorithm. The number of centres $\boldsymbol(c_i)$ and spread parameter $\epsilon$ were found through experimentation.
 
 \subsubsection*{Output Layer}
 The output layer calculates a weighted sum of hidden layer outputs:
@@ -190,13 +190,13 @@ The best architecture found through experimentation uses k-means algorithm to fi
 \Phi_i(\boldsymbol{x}) = \exp\left(-\frac{1}{(\epsilon \times d_{max})^2} \lvert\lvert \boldsymbol{x} -  \boldsymbol{c_i} \rvert\rvert ^2\right)  
 $  \\
  Hidden layer size ($m$) & 20  \\
- RBF spread ($\epsilon \times d_{max}$)& $\frac{1}{2}(0.8 \times d_{max})^2$   \\
+ RBF spread $\sigma^2$ & $\frac{1}{2}(0.8 \times d_{max})^2$   \\
  \hline
  Output layer activation function & Linear: $y(\boldsymbol{x}) = \displaystyle\sum_{i=1}^{m} w_i \Phi_i(\boldsymbol{x})$ \\
  Output layer size & 1 \\
  \hline
  Training algorithm & 1. Unsupervised center selection \\ 
- & 2. Backpropagation (one step weight calculation)  \\
+ & 2. One step weight calculation using matrix pseudo inverse  \\
  Centre selection algorithm & k-means clustering \\
  Backprop performance function & Mean Squared Error (MSE)  \\ [1ex] 
  \hline
@@ -231,7 +231,7 @@ F = \Phi_i(\boldsymbol{x}) = \exp\left(-\frac{m}{(\epsilon \times d_{max})^2} di
 \item[4] Calculate the weights of the output layer $W$ using the pseudo inverse of $F^+$ and the target data $D$: $W= F^+D$.
 \end{list}
 
-For the center selection step of the training algorithm two options were considered - random center selection and k-means clustering. The kmeans function from Matlab was used for the second approach, which uses k-means++ algorithm \cite{Arthur2007} for generating initial center locations and the runs the k-means clustering algorithm \cite{Lloyd82} to iteratively search for the true center locations. In order to decide which one to use an experiment was performed using two networks, structually the same as the one in table \ref{table:architecture},but with number of centers $m = 10, 15, 20, 25$ and $\epsilon = 1$. The two networks use the two different center selection algorithms. They were ran 10 times for each number of centers. The results are given below in table \ref{table:centermse}
+For the center selection step of the training algorithm two options were considered - random center selection and k-means clustering. The kmeans function from Matlab was used for the second approach, which uses k-means++ algorithm \cite{Arthur2007} for generating initial center locations and then runs the k-means clustering algorithm \cite{Lloyd82} to iteratively search for the true center locations. In order to decide which one to use an experiment was performed using two networks, structurally the same as the one in table \ref{table:architecture},but with number of centres $m = 10, 15, 20, 25$ and $\epsilon = 1$. The two networks use the two different center selection algorithms. They were ran 10 times for each number of centres. The results are given below in table \ref{table:centermse}
 
 \begin{table}[h]
 \centering
@@ -255,29 +255,130 @@ K-means Test MSE Std & 0.0032 & 0.0044 & 0.0043 & 0.0041 \\
 Clearly the performance (in terms of MSE) of k-means is much better than random center selection. So this is the algorithm we will use.
 
 \subsection*{Evaluation}
-In selecting the final network you will have to make choices about, for
-example, the number of neurons or the number of layers to use.
-– Explain what metric or metrics you used for comparison between
-networks.
-– Explain the process you went through in making the selection of
-the final architecture. If you evaluated a number of networks, give
-details of what their structures were and how they performed. You
-may summarise repeated tests of the same structure, but remember
-to give mean and variance of summary statistics.
-– Explain how you used the data in this selection process. For example,
-was it split into training, validation and test sets? How big were
-they?
+%In selecting the final network you will have to make choices about, for
+%example, the number of neurons or the number of layers to use.
+%– Explain what metric or metrics you used for comparison between
+%networks.
+%– Explain the process you went through in making the selection of
+%the final architecture. If you evaluated a number of networks, give
+%details of what their structures were and how they performed. You
+%may summarise repeated tests of the same structure, but remember
+%to give mean and variance of summary statistics.
+%– Explain how you used the data in this selection process. For example,
+%was it split into training, validation and test sets? How big were
+%they?
+We have made decisions about the network structure, training algorithm, data preprocessing and splitting into training and test sets. The parameters that need to be discovered experimentally are the number of centres (size of hidden layer) and basis function spread parameter $\epsilon$, which we introduced in the Network section.
+\subsubsection*{Metrics}
+MSE was used as a metric of performance. However MSE on it's own is not sufficient, because it will keep decreasing as we increase the number of nodes in the network, but if we add two many nodes the generalisation of the network will be poor. This is why in addition to MSE, we also look at the percentage of errors in each of the two classes. Ideally we want our model to make an approximately equal amount of errors in both classes. If the model develops a bias against a particular class this means that we are probably over fitting the data or not capturing the structure of the data.
+
+
+
+\subsubsection*{Experimentation for determining final network}
+Initially we consider only the number of centres $m$ and search for networks with low MSE and approximately equal percentage of errors in both classes. We set the spread parameter of the network $\epsilon = 1$ and run for different hidden layer sizes $m = 5, 10, 15, 20, 25, 30, 40, 50, 60$. For each value of $m$ we train and evaluate the network 10 times and record the mean value of MSE, mean percentage of errors and mean absolute difference of errors for both the training and test sets. Results are plotted in figure \ref{fig:animals}.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figures/perf/mseplot_m(5-60)_e(10-10).png}
+        \caption{Mean MSE of Test and Train sets.}
+        \label{fig:mse}
+    \end{subfigure}
+    \hfill %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+      %(or a blank line to force the subfigure onto a new line)
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figures/perf/errorplot_m(5-60)_e(10-10).png}
+        \caption{Mean absolute difference of errors in class 0 and class 1 and mean percentage of errors in both classes, measured on test set.}
+        \label{fig:errorplot}
+    \end{subfigure}
+    \hfill %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+    %(or a blank line to force the subfigure onto a new line)
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figures/perf/errorbar_m(5-60)_e(10-10).png}
+        \caption{Bar plot of mean percentage of errors in class 0 and class 1 measured on test set.}
+        \label{fig:errorbar}
+    \end{subfigure}
+    \caption{Performance of RBFN with parameters $m = 5,15,20,25,30,40,50,60$ and $\epsilon = 1$, ran 10  times for each parameter combination.}\label{fig:performance}
+\end{figure}
+
+From figure \ref{fig:mse} above we can see that the MSE decreases when increasing the number of nodes, as we expected. After 20 hidden nodes MSE decreases at a slower rate. Looking at figure \ref{fig:errorplot} we see that after around 20 hidden nodes the mean absolute difference in errors doesn't change very much and the total number of errors decreases very slowly. These two plots give us an understanding of how performance increases by increasing number of neurons, but tells us little about how much we are overfitting the data. Looking at figure \ref{fig:errorbar} we can see that after 25 hidden nodes the errors in class 1 remain the same, while the errors in class 0 decrease. After that point the network is developing a bias against class 0. This is a hint that we are overfitting after this point. On the other hand, when we use fewer than 20 nodes the bias of the network is against the other class. This probably means we don't have enough neurons to capture the structure of the data. So we decide to use 20 hidden nodes the hidden layer and perform experiments to determine the spread coefficient $\epsilon$, while keeping $m = 20$. The results are shown in figure \ref{fig:performance1}.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figures/perf/mseplot_m(20-20)_e(6-12).png}
+        \caption{Mean MSE of Test and Train sets.}
+        \label{fig:mse1}
+    \end{subfigure}
+    \hfill %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+      %(or a blank line to force the subfigure onto a new line)
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figures/perf/errorplot_m(20-20)_e(6-12).png}
+        \caption{Mean absolute difference of errors in class 0 and class 1 and mean percentage of errors in both classes, measured on test set.}
+        \label{fig:errorplot1}
+    \end{subfigure}
+    \hfill %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+    %(or a blank line to force the subfigure onto a new line)
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figures/perf/errorbar_m(20-20)_e(6-12).png}
+        \caption{Bar plot of mean percentage of errors in class 0 and class 1 measured on test set.}
+        \label{fig:errorbar1}
+    \end{subfigure}
+    \caption{Performance of RBFN with parameters $m = 20$ and $\epsilon = 0.6,0.7, 0.8, 0.9, 1.0, 1.1, 1.2$, ran 10  times for each parameter combination.}\label{fig:performance1}
+\end{figure}
+
+Looking at figure \ref{fig:mse1} we see that MSE reaches a local minimum around $\epsilon = 0.9$ and at that point the test set MSE is lower than the training set MSE. After $\epsilon = 1$ it starts decreasing, which indicates we might be ofverfitting again. Looking at \ref{fig:errorplot1}, we see that at $\epsilon = 0.8$ we get very low mean absolute difference in errors between the two classes. Furthermore, looking at \ref{fig:errorbar1} we see that at the same point the mean percentage of errors for both classes is around 1\% with a very small standard deviation. We choose $\epsilon = 0.8$ for our final architecture, as it  achieves a low MSE, a balance between errors in the two classes and stable results.
+
 
 \subsection*{Results}
-Give a synopsis of the results obtained from the final selected network.
-Relate these results back to the problem as stated – a MSE on its own
-is not helpful in judging how well something works.
-Identify anything of interest in the results, such as areas of particularly
-good or poor performance, or variation between different training runs.
+%Give a synopsis of the results obtained from the final selected network.
+%Relate these results back to the problem as stated – a MSE on its own
+%is not helpful in judging how well something works.
+%Identify anything of interest in the results, such as areas of particularly
+%good or poor performance, or variation between different training runs.
+The final chosen architecture achieves an average MSE of 0.025. In tables \ref{table:test_results} and \ref{table:train_results} the mean results for the training and test sets out of 20 runs of the architecture are shown. We can see that the distribution of errors in the two classes isn't as balanced as when we ran the network 10 times. This could mean that the experiments performed were insufficient. 
+\begin{table}[h]
+\csvautotabular{../MeanTestResults.csv}
+\caption{Mean test results for $m=20$, $\epsilon=0.8$ out of 20 runs.}
+\label{table:test_results}
+\end{table}
 
+\begin{table}[h]
+\csvautotabular{../MeanTrainResults.csv}
+\caption{Mean train results for $m=20$, $\epsilon=0.8$ out of 20 runs.}
+\label{table:train_results}
+\end{table}
 
+On figure \ref below the confusion matrix ROC plot and error histograms are shown for a single run of the network.
 
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figures/final/confmat.png}
+        \caption{Confusion matrix.}
+        \label{fig:confmat}
+    \end{subfigure}
+    \hfill %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+      %(or a blank line to force the subfigure onto a new line)
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figures/final/roc.png}
+        \caption{ROC plot.}
+        \label{fig:roc}
+    \end{subfigure}
+    \hfill %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+    %(or a blank line to force the subfigure onto a new line)
+    \begin{subfigure}[t]{0.32\textwidth}
+        \includegraphics[width=\textwidth]{../figures/final/errhist.png}
+        \caption{Error histogram.}
+        \label{fig:errhist}
+    \end{subfigure}
+    \caption{Performance of RBFN with parameters $m = 20$ and $\epsilon = 0.6,0.7, 0.8, 0.9, 1.0, 1.1, 1.2$, ran 10  times for each parameter combination.}\label{fig:Accuracy of selected architecture on the test set from a single run.}
+\end{figure}
 
+From the confusion matrix we see that the network achieves 96.4\% accuracy with a relativly equal distribution of errors in both classes. The ROC plot indicates a very good classifier as well. However on the error histogram we see that there are a lot of errors at the far right. This indicates that the network wasn't even close to classifying these data points correctly. These maybe points located near near a class boundary which are misclassified due to noise or outliers, which are not in range of any of the RBFs. 
+
+We also notice that the network shows a relatively small MSE even with a very small hidden layer. This could mean that the data we have isn't representative of the problem.
+
+Comparing the performance of the RBFN to that of the models proposed in \cite{Candanedo2016} we see that we get approximately the same accuracy as the models using the same input variables.
 
 
 \part*{Section B}

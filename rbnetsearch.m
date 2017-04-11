@@ -1,7 +1,7 @@
 use_kmeans = 1;
-nodes = [10:5:25];
-std_coefitients = [1];
-reps = 10;
+nodes = [20];
+std_coefitients = [0.8];
+reps = 1;
 
 % Create structure to hold mean training results
 s = length(nodes) * length(std_coefitients);
@@ -13,6 +13,9 @@ mtrr.err1 = zeros(1, s);
 mtrr.std_err1 = zeros(1, s);
 mtrr.err_diff = zeros(1, s);
 mtrr.std_err_diff = zeros(1, s);
+mtrr.nodes = nodes;
+mtrr.reps = reps;
+mtrr.std_coefitients = std_coefitients;
 
 % Create structure to hold mean test results
 mtr.mse = zeros(1, s);
@@ -23,6 +26,9 @@ mtr.err1 = zeros(1, s);
 mtr.std_err1 = zeros(1, s);
 mtr.err_diff = zeros(1, s);
 mtr.std_err_diff = zeros(1, s);
+mtr.nodes = nodes;
+mtr.reps = reps;
+mtr.std_coefitients = std_coefitients;
 
 % Create structure to hold intermediate training results
 train_res.mse = zeros(1, reps);
@@ -59,7 +65,7 @@ for std_coef = std_coefitients
         test_res.err1(i) = abs(sum(temp(temp<0)))*100/numel(temp);
         test_res.err_diff(i) = abs(test_res.err0(i) - test_res.err1(i));
         
-        %plotconfusion(D1, Dclass', 'Training', D2, Dthresh', 'Test');
+        plotconfusion(D1, Dclass', 'Training', D2, Dthresh', 'Test');
         fprintf('MSE1 = %6.4f; MSE2 = %6.4f; Err0 = %4.2f; Err1 = %4.2f \n', MSE1, MSE2, test_res.err0(i), test_res.err1(i));
 
     end;
