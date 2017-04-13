@@ -38,7 +38,7 @@ The problem is a two class classification problem - occupancy detection based on
 A certain amount of noise is expected in the recorded data so a suitable architecture should have good generalisation. Since data was measured in a controlled environment we expect the range of training variables to roughly match the range of expected data.
 
 \subsection*{Architectures}
-There are several neural network architectures suitable for this kind of classification problem - Multilayer perceptron, Radial basis function network and Correlation memory matrix. 
+There are several neural network architectures suitable for this kind of classification problem. We will consider Multilayer perceptron and Radial basis function network. 
 \subsubsection*{Multilayer Perceptron (MLP)}
 MLP is a feedforward neural network with multiple neurons composed in multiple layers. All neurons are the same in the case of classification and they compute a weighted sum of inputs and apply an activation function (sigmoid or tanh). There is an input layer, which distributes the inputs, zero or more hidden layers and an output layer. Each layer feeds into the next one. This type of neural network uses and error correcting learning rule and a backpropagation training algorithm. Backpropagation consists of two stages - a forward pass, where outputs are computed and a backward pass where weights are adjusted according to the error in outputs. In the backward pass the output layer weights are adjusted according to the local gradient of the error function and the hidden layer weights are adjusted according to the local gradients of the nodes in the subsequent layer. 
 \subsubsection*{MLP Advantages and disadvantages}
@@ -47,32 +47,30 @@ Determining the number of hidden layers and number of neurons in each layer may 
 
 
 %MLP is a feedforward, multilayer architecture consisting of one input layer, one output layer and hidden layers. The input layer just passes on the inputs. Each neuron in the hidden layers computes a weighted sum of inputs, applies a transfer function and passes it's output to each neuron in the next layer. Each layer feeds into the next and the output layer produces the outputs. The MLP uses an error correction learning rule, where it minimises an error function defined by the difference of it's output and the desired output (typically the error function is mean squared error). In order to minimise the error function, it needs to be continuous, therefore the transfer function of each neuron is either a hyperbolic tangent function or a sigmoid function. The training algorithm for MLP is backpropagation. It consists of a forward pass, where the network computes it's output and a backward pass, where the weights are adjusted. Weight changes at each layer are computed based on the local gradient of the next layer. The MLP classifies patterns by partitioning the feature space into regions. It can be used to solve linearly inseparable classification problems, as each layer computes a non-linear transformation of the outputs of the previouse one.
-\subsubsection*{Radial Basis Function Network (RBF)}
-RBF is a feedforward network, consisting of single hidden layer and an input and output layer. Input layer just distributes inputs to the hidden layer. Each neuron in the hidden layer computes a radially symmetric basis activation function (typically a Gaussian) from the inputs. The output layer neurons compute a weighted sum of the outputs of the hidden layer. Each neuron in the hidden layer has two associated parameters - a point in the feature space, which is called a center, and a spread. It computes it's response to a given input based on the euclidean distance between the data point and it's center. Training is typically done in two stages - center selection and weight estimation, where wighgts can be cimputed in a single matrix vector calculation. RBFs can also be trained in a supervised manner (like MLP) or by selecting centers at each data point and using regularisation, but these aproaches are much slower.
-\subsubsection*{RBF Advantages and Disadvantages}
-There is only one hidden layer so we only need to experiment with it's size. When using unsupervised center selection, weights can be computed in a single calculation. There are much less architecture parameters that can be varied when searching for an  architecture compared to the MLP. The RBF is a local approximator, which is an advantage when we expect new data to be in a similar range to the training data or when abnormal inputs need to be ignored. \\
+\subsubsection*{Radial Basis Function Network (RBFN)}
+RBFN is a feedforward network, consisting of single hidden layer and an input and output layer. Input layer just distributes inputs to the hidden layer. Each neuron in the hidden layer computes a radially symmetric basis activation function (typically a Gaussian) from the inputs. The output layer neurons compute a weighted sum of the outputs of the hidden layer. Each neuron in the hidden layer has two associated parameters - a point in the feature space, which is called a center, and a spread. It computes it's response to a given input based on the euclidean distance between the data point and it's center. Training is typically done in two stages - center selection and weight estimation, where wighgts can be cimputed in a single matrix vector calculation. RBFNs can also be trained in a supervised manner (like MLP) or by selecting centers at each data point and using regularisation, but these aproaches are much slower.
+\subsubsection*{RBFN Advantages and Disadvantages}
+There is only one hidden layer so we only need to experiment with it's size. When using unsupervised center selection, weights can be computed in a single calculation. There are much less architecture parameters that can be varied when searching for an  architecture compared to the MLP. The RBFN is a local approximator, which is an advantage when we expect new data to be in a similar range to the training data or when abnormal inputs need to be ignored. \\
 It is difficult to determine center locations. When data isn't clustered might need a very large hidden layer.  Supervised center selection and regularisation training approaches are very slow. 
 
-\subsubsection*{Correlation Matrix Memory(CMM)}
-CMMs are single layer neural networks, which use the Hebbian learning rule. They consist of a single weight matrix which stores correlations between input and output patterns. Learning is done by computing the outer product of the input and output and adding it to the outer products of all other patterns to form the weight matrix. Recall of a stored pattern is done by multiplying the weight matrix and the input. For efficiency these networks usually have binary inputs and weights. In order to use a CMM as a classifier the output needs to be threasholded, so the highest output value is set to 1 and represents the class, or some kind of postprocessing needs to be done such as the one used in \cite{Zhou1998}.  
-\subsubsection*{CMM advantages and disadvantages}
-A hardware implementation of CMM can be very fast. Training and recall are both very fast operations. \\
-A CMM can store a limited number of pattern associations after which new associations become diluted. Real valued data needs to be encoded using a binning algorithm. Best performance requires input patterns to follow a uniform distribution. Good classification might require additional post processing (e.g. k nearest neighbours).
+%\subsubsection*{Correlation Matrix Memory(CMM)}
+%CMMs are single layer neural networks, which use the Hebbian learning rule. They consist of a single weight matrix which stores correlations between input and output patterns. Learning is done by computing the outer product of the input and output and adding it to the outer products of all other patterns to form the weight matrix. Recall of a stored pattern is done by multiplying the weight matrix and the input. For efficiency these networks usually have binary inputs and weights. In order to use a CMM as a classifier the output needs to be threasholded, so the highest output value is set to 1 and represents the class, or some kind of postprocessing needs to be done such as the one used in \cite{Zhou1998}.  
+%\subsubsection*{CMM advantages and disadvantages}
+%A hardware implementation of CMM can be very fast. Training and recall are both very fast operations. \\
+%A CMM can store a limited number of pattern associations after which new associations become diluted. Real valued data needs to be encoded using a binning algorithm. Best performance requires input patterns to follow a uniform distribution. Good classification might require additional post processing (e.g. k nearest neighbours).
 
 %\subsubsection*{Advantages/Disadvantages}
 %The Perceptron is a very simple and quick to train network consisting of a single neuron. However it can easily be ruled out because of it's inability to classify linearly inseperable problems. From figure \ref{fig:plotmatrix} we can clearly see that our data is linearly inseperable when looking at the relation between Hummidity and CO2 for example. 
 %The MLP is suatable for solving non-linearly seperable problems. It's iterative training process can be slow depending on the error function minimisation method used, however it is very customisable. Once a good aproximate solution is found generalisation can be easyly improved by adjusting the stopping criteria of the training or employing regularisation. Choosing the right size of the network might require a lot of trial and error. The MLP is global aproximator, which might be an advantage when we could expect new data to be significantly different from training data.
-%The RBF has a single hidden layer. Training can be very slow when using supervised selection of centers or regularisation. There are much less architecture parameters that can be varied when searching for a suitable architecture compared to the MLP. The RBF is a local aproximator, which is an advantage when we expect new data to be in a similar range to the training data and can also be used for detecting abnormal inputs. 
+%The RBFN has a single hidden layer. Training can be very slow when using supervised selection of centers or regularisation. There are much less architecture parameters that can be varied when searching for a suitable architecture compared to the MLP. The RBFN is a local aproximator, which is an advantage when we expect new data to be in a similar range to the training data and can also be used for detecting abnormal inputs. 
 
 %\subsection*{Data exploration}
 %All features - Temperature, Humidity, Light, CO2, Humidity Ratio are real valued. In figure \ref{fig:plotmatrix} the MATLAB $gplotmatrix$ function is used to plot all variables against each other and create histograms of each variable along the diagonal and class are color coded.  
 
 \subsubsection*{Choice of network architecture}
-Comparing the three architectures stated above we choose an RBF network architecture. Compared to the MLP the RBF has a simpler training process. Furthermore, using our knowledge of the problem we can see that the data we have should more or less be like the expected data after training. Because of this an RBF would be more suitable as a local classifier rather than an MLP.
-The CMM is superior in terms of speed, and would be a very suitable choice for a real time application. However it would require further domain knowledge of the data in order to decide on encoding of inputs. The CMM's capacity limitations might mean we would need a very large weight matrix. 
+Comparing the two architectures stated above we choose an RBFN network architecture. Compared to the MLP the RBFN has a simpler training process. Furthermore, using our knowledge of the problem we can see that the data we have should more or less be like the expected data after training. Because of this an RBFM would be more suitable as a local classifier rather than an MLP. There are far less training parameters that have to be discovered experimentally when using an RBFN
 
 \section*{Creation and Application}
-The neural network architecture we are going to use is an RBF network with unsupervised center selection. As a benchmark we will use a fixed number of centres determined by the rule of thumb $m = \sqrt[3]{N}, N = number of data points$ and a spread $dmax = maximum distance between centers$ The network is implemented and tested in Matlab and the code is available in the appendix. 
 
 \subsection*{Data}
 %• Data [10 marks]
@@ -274,9 +272,9 @@ MSE was used as a metric of performance. However MSE on it's own is not sufficie
 
 
 \subsubsection*{Experimentation for determining final network}
-Initially we consider only the number of centres $m$ and search for networks with low MSE and approximately equal percentage of errors in both classes. We set the spread parameter of the network $\epsilon = 1$ and run for different hidden layer sizes $m = 5, 10, 15, 20, 25, 30, 40, 50, 60$. For each value of $m$ we train and evaluate the network 10 times and record the mean value of MSE, mean percentage of errors and mean absolute difference of errors for both the training and test sets. Results are plotted in figure \ref{fig:animals}.
+Initially we consider only the number of centres $m$ and search for networks with low MSE and approximately equal percentage of errors in both classes. We set the spread parameter of the network $\epsilon = 1$ and run for different hidden layer sizes $m = 5, 10, 15, 20, 25, 30, 40, 50, 60$. For each value of $m$ we train and evaluate the network 10 times and record the mean value of MSE, mean percentage of errors and mean absolute difference of errors for both the training and test sets. Results are plotted in figure \ref{fig:performance}.
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \begin{subfigure}[t]{0.32\textwidth}
         \includegraphics[width=\textwidth]{../figures/perf/mseplot_m(5-60)_e(10-10).png}
@@ -300,9 +298,9 @@ Initially we consider only the number of centres $m$ and search for networks wit
     \caption{Performance of RBFN with parameters $m = 5,15,20,25,30,40,50,60$ and $\epsilon = 1$, ran 10  times for each parameter combination.}\label{fig:performance}
 \end{figure}
 
-From figure \ref{fig:mse} above we can see that the MSE decreases when increasing the number of nodes, as we expected. After 20 hidden nodes MSE decreases at a slower rate. Looking at figure \ref{fig:errorplot} we see that after around 20 hidden nodes the mean absolute difference in errors doesn't change very much and the total number of errors decreases very slowly. These two plots give us an understanding of how performance increases by increasing number of neurons, but tells us little about how much we are overfitting the data. Looking at figure \ref{fig:errorbar} we can see that after 25 hidden nodes the errors in class 1 remain the same, while the errors in class 0 decrease. After that point the network is developing a bias against class 0. This is a hint that we are overfitting after this point. On the other hand, when we use fewer than 20 nodes the bias of the network is against the other class. This probably means we don't have enough neurons to capture the structure of the data. So we decide to use 20 hidden nodes the hidden layer and perform experiments to determine the spread coefficient $\epsilon$, while keeping $m = 20$. The results are shown in figure \ref{fig:performance1}.
+From figure \ref{fig:mse} we can see that the MSE decreases when increasing the number of nodes, as we expected. After 20 hidden nodes MSE decreases at a slower rate. Looking at figure \ref{fig:errorplot} we see that after around 20 hidden nodes the mean absolute difference in errors doesn't change very much and the total number of errors decreases very slowly. These two plots give us an understanding of how performance increases by increasing number of neurons, but tells us little about how much we are overfitting the data. Looking at figure \ref{fig:errorbar} we can see that after 25 hidden nodes the errors in class 1 remain the same, while the errors in class 0 decrease. After that point the network is developing a bias against class 0. This is a hint that we are overfitting after this point. On the other hand, when we use fewer than 20 nodes the bias of the network is against the other class. This probably means we don't have enough neurons to capture the structure of the data. So we decide to use 20 hidden nodes the hidden layer and perform experiments to determine the spread coefficient $\epsilon$, while keeping $m = 20$. The results are shown in figure \ref{fig:performance1}.
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \begin{subfigure}[t]{0.32\textwidth}
         \includegraphics[width=\textwidth]{../figures/perf/mseplot_m(20-20)_e(6-12).png}
@@ -336,21 +334,21 @@ Looking at figure \ref{fig:mse1} we see that MSE reaches a local minimum around 
 %Identify anything of interest in the results, such as areas of particularly
 %good or poor performance, or variation between different training runs.
 The final chosen architecture achieves an average MSE of 0.025. In tables \ref{table:test_results} and \ref{table:train_results} the mean results for the training and test sets out of 20 runs of the architecture are shown. We can see that the distribution of errors in the two classes isn't as balanced as when we ran the network 10 times. This could mean that the experiments performed were insufficient. 
-\begin{table}[h]
+\begin{table}[h!]
 \csvautotabular{../MeanTestResults.csv}
 \caption{Mean test results for $m=20$, $\epsilon=0.8$ out of 20 runs.}
 \label{table:test_results}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[h!]
 \csvautotabular{../MeanTrainResults.csv}
 \caption{Mean train results for $m=20$, $\epsilon=0.8$ out of 20 runs.}
 \label{table:train_results}
 \end{table}
 
-On figure \ref below the confusion matrix ROC plot and error histograms are shown for a single run of the network.
+On figure \ref{fig:accuracy} the confusion matrix ROC plot and error histograms are shown for a single run of the network.
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \begin{subfigure}[t]{0.32\textwidth}
         \includegraphics[width=\textwidth]{../figures/final/confmat.png}
@@ -371,20 +369,40 @@ On figure \ref below the confusion matrix ROC plot and error histograms are show
         \caption{Error histogram.}
         \label{fig:errhist}
     \end{subfigure}
-    \caption{Performance of RBFN with parameters $m = 20$ and $\epsilon = 0.6,0.7, 0.8, 0.9, 1.0, 1.1, 1.2$, ran 10  times for each parameter combination.}\label{fig:Accuracy of selected architecture on the test set from a single run.}
+    \caption{Performance of RBFN with parameters $m = 20$ and $\epsilon = 0.6,0.7, 0.8, 0.9, 1.0, 1.1, 1.2$, ran 10  times for each parameter combination.}\label{fig:accuracy}
 \end{figure}
 
-From the confusion matrix we see that the network achieves 96.4\% accuracy with a relativly equal distribution of errors in both classes. The ROC plot indicates a very good classifier as well. However on the error histogram we see that there are a lot of errors at the far right. This indicates that the network wasn't even close to classifying these data points correctly. These maybe points located near near a class boundary which are misclassified due to noise or outliers, which are not in range of any of the RBFs. 
-
-We also notice that the network shows a relatively small MSE even with a very small hidden layer. This could mean that the data we have isn't representative of the problem.
-
-Comparing the performance of the RBFN to that of the models proposed in \cite{Candanedo2016} we see that we get approximately the same accuracy as the models using the same input variables.
+From the confusion matrix we see that the network achieves 96.4\% accuracy with a relatively equal distribution of errors in both classes. The ROC plot indicates a very good classifier as well. However on the error histogram we see that there are a lot of errors at the far right. This indicates that the network wasn't even close to classifying these data points correctly. These maybe points located near near a class boundary which are misclassified due to noise or outliers, which are not in range of any of the RBFs. We also notice that the network shows a relatively small MSE even with a very small hidden layer. This could mean that the data we have isn't representative of the problem. Comparing the performance of the RBFN to that of the models proposed in \cite{Candanedo2016} we see that we get approximately the same accuracy as the models using the same input variables.
 
 
 \part*{Section B}
 
 
+\section*{Building energy consumption prediction}
+The problem of predicting energy consumption of a building can be very important for places where energy consumption goes up in colder months, while energy production goes down. The chosen network is a Multilayer Perceptron. A similar problem solved with neural networks can be seen in \cite{khosravani2016comparison}.
+\subsection*{Technical features of architecture}
+MLP is a feedforward, multilayer architecture consisting of one input layer, one output layer and one or more hidden layers. The input layer distributes the inputs. Each neuron in the hidden layers computes a weighted sum of inputs, applies an activation function and produces an output. Each layer is fully connected to the next one. The output layer produces the outputs. The MLP uses an error correction learning rule, where it minimises an error function defined by the difference of it's output and the desired output (typically the error function is mean squared error). The activation functions for all hidden layer neurons are either hyperbolic tangent functions or a sigmoid functions. In the case of regression, the output layer has a linear activation function. The training algorithm for MLP is backpropagation. It consists of a forward pass, where the network computes it's output and a backward pass, where the weights are adjusted. Weight changes at each layer are computed based on the local gradient of the next layer. The MLP partitions the feature space into regions (using straight lines in the 2D case). 
+\subsection*{Suitability of the architecture for your application}
+The multilayer perceptron is a universal aproximator. Given the right architecture and enough data it can approximate any function. The training process is slow and has to be done before the network is deployed. MLP also requires a large amount of data to be trained and the data needs to be representative of the problem. However once deployed the network can produce outputs very quickly. MLP is suitable for this particular problem because there is already a lot of historical energy consumption data available to train the network. It might be susceptible to changes in building, depending on the data used as inputs. Data about lots of different buildings might be required in order to achieve good generalisation.
+\subsection*{Source of data, and how the network might be trained}
+As mentioned already, there is plenty of historical data to use as inputs to our network. Since the problem is time series prediction we will be using past energy consumption as inputs. Since energy consumption is often dependant on the time of year, the first three input variables will be the energy consumption for the month before, this month and next month last year (if we are predicting for July 2017, inputs are energy consumption for June, July, August 2016). We also take the average temperature from the weather forecast for these three past months as an input. Another sensible input value would be the energy efficiency score of the building(this might be country specific).
+The network is trained using backpropagation. The desired values are obtained from historical data from past years. The activation function of hidden layer neurons will be sigmoid, so normalizing input variables to the range 0-1 so they match the dynamic range of the activation function will speed up training. The input data will be split into training, validation and test sets (50/75/75). During training the error on the validation set will be monitored and used as a stopping criteria. Size and number of hidden layers need to be determined experimentally. If desired accuracy isn't achieved then regularisation can be used in training. 
+\subsection*{How the network would handle significant changes to building or environment}
+The energy consumption inputs of the network depend on the building they were measured in, so changes in building might affect the performance of the network significantly. The data we have for training should cover the range of buildings and climate zones, where we want the network to be deployed afterwards. The energy efficiency input, as mentioned might be country specific and might have different ranges, or categories. We can overcome this by normalising the values for different efficiency scales to the range 0-1. However the scales might differ in their criterion for determining energy efficiency. If this is the case the network won't generalise well in the different countries. If none of these approaches gives sensible results, more domain knowledge of the problem might be required to select more suitable inputs.
 
+
+\section*{Abnormality detection in the operation of HVAC systems}
+Early detection of faults in an HVAC system could significantly decrease maintenance costs. Research in abnormality detection in HVAC sensor data has previously shown good results \cite{Narayanaswamy2014}. The proposed neural network architecture follows the one used in \cite{wrro89505}.
+\subsection*{Technical features of the architecture}
+%The chosen architecture is a binary Correlation Matrix Memory. Binary CMMs are single layer neural network with binary inputs and weights, which use the Hebbian learning rule. They store associations between input and output patterns by setting the wights of connections, betweeen input bits equal to 1 and output bits equal to 1, to 1. Recall is done by multIn order to be used as a classifier the output of the CMM needs to be thresholded. 
+
+Binary CMMs are single layer neural networks, which use the Hebbian learning rule. They consist of a single weight matrix which stores correlations between input and output patterns. Learning is done by computing the outer product of the binary input and output and adding it to the outer products of all other stored patterns to form the weight matrix. Recall of a stored pattern is done by multiplying the weight matrix and the input. The result from a recall is real valued. In order to obtain the associated binary output pattern, the output needs to be threasholded. A Wilshaw threashold is chosen for this architecture where each value in the recalled vector is compared to the number of bits, set to one in the input, and is set to one if it's greater and to 0 otherwise. Real valued inputs also need to be encoded. We to this by a binning procedure, where we choose bins for certain ranges of the input and associate a binary pattern to that bin. After all inputs have been binned they are concatenated to form the input to the CMM. 
+\subsection*{Suitability of the architecture for your application}
+A hardware implementation of CMM can be very fast. Store and recall are both very fast operations. This means we can monitor HVAC systems operation in real time and discover abnormal behaviour as soon as it occurs. This makes our chosen architecture very suitable for the particular problem.
+\subsection*{Source of data, and how the network might be trained}
+The source of data will be sensors, part of the building managment system, which monitor different aspects of the HVAC system operation. Sensors could be placed in each individual room in order to help localise faults easier. The sensor measurements we will use as inputs are energy consumption, airflow, supply water temperature. Sensor readings are taken at discrete time intervals to form our training input vectors. A significant amount of data might be required in order to achieve good generalisation and performance. We decide to monitor normal operation of the HVAC system for 24 hours during 4 days of the year in different weather conditions and temperatures. The network is trained by applying the described binning and concatenation operation to different input vectors and storing them in the CMM. Detecting abnomalities is done by recalling patterns in real time and comparing how similar they are to known patterns using k-nearest neighbour algorithm. The tolerated level of simmilarity can be adjusted by using a smaller threashold at the outputs during recall and requires either domain knowledge or experimentation. If the achieved performance is not satisfactory domain knowledge can also be used in determining appropriate input variables and sizes of bins.
+\subsection*{How the network would handle significant changes to building or environment}
+The CMMs susceptibility to change of building or environment depends on the training examples. Given enough training data for different buildings in different environmental conditions the network will show good generalisation. On the other hand network can be trained over time by storing input patterns which prove to be false alarms. These patterns have to be stored manually by maintenance staff of the building for example.
 
 \bibliographystyle{plain}
 \bibliography{science}
@@ -466,5 +484,33 @@ nochange = 0      &          &          &          &          &          & -0.53
 \label{table:pca}
 \end{table}
 
+
+\section*{Results from experimentation}
+\begin{table}[!ht]
+\csvautotabular{../MeanTestResults5-60.csv}
+\caption{Test results for $m = 5,15,20,25,30,40,50,60$ and $\epsilon = 1$, 10 runs}
+\label{table:res1}
+\end{table}
+
+
+\begin{table}[!ht]
+\csvautotabular{../MeanTrainResults5-60.csv}
+\caption{Train results for $m = 5,15,20,25,30,40,50,60$ and $\epsilon = 1$, 10 runs}
+\label{table:res2}
+\end{table}
+
+
+\begin{table}[h]
+\csvautotabular{../MeanTestResults6-12.csv}
+\caption{Test results for $m = 20$ and $\epsilon = 0.6,0.7,0.8,0.9,1.0,1.1,1.2$, 10 runs}
+\label{table:res3}
+\end{table}
+
+
+\begin{table}[h]
+\csvautotabular{../MeanTrainResults6-12.csv}
+\caption{Train results for $m = 20$ and $\epsilon = 0.6,0.7,0.8,0.9,1.0,1.1,1.2$, 10 runs}
+\label{table:res4}
+\end{table}
 
 \end{document}
