@@ -25,7 +25,15 @@
 \usepackage{standalone}
 \usepackage{subcaption}
 
+\usepackage[font={small,it}]{caption}
 
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0.7em}
+
+\usepackage{titlesec}
+\titlespacing\section{0pt}{11pt }{-3pt}
+\titlespacing\subsection{0pt}{10pt}{-3pt}
+\titlespacing\subsubsection{0pt}{10pt}{-3pt}
 
 \begin{document}
 
@@ -41,6 +49,7 @@ Open Examination}
 
 \subsection{Problem}
 The problem is a two class classification problem - occupancy detection based on sensor readings. The recorded sensor data is temperature, humidity, light and carbon dioxide. The features include an additional derived feature, humidity ratio, which was derived from the original recorded variables. Each point in the data set is also timestamped. In \cite{Candanedo2016} the time stamp was used to derive two additional features - week status(WS) and number of seconds from midnight(NSM).
+
 A certain amount of noise is expected in the recorded data so a suitable architecture should have good generalisation. Since data was measured in a controlled environment we expect the range of training variables to roughly match the range of expected new data.
 
 \subsection{Architectures}
@@ -48,7 +57,8 @@ There are several neural network architectures suitable for this kind of classif
 \subsubsection{Multilayer Perceptron (MLP)}
 MLP is a feedforward neural network with multiple neurons composed in multiple layers. All neurons are the same in the case of classification and they compute a weighted sum of inputs and apply an activation function (sigmoid or tanh). There is an input layer, which distributes the inputs, one or more hidden layers and an output layer. Each layer feeds into the next one. This type of neural network uses an error correcting learning rule and a backpropagation training algorithm. Backpropagation consists of two stages - a forward pass, where outputs are computed and a backward pass where weights are adjusted according to the error in outputs. In the backward pass the output layer weights are adjusted according to the local gradient of the error function and the hidden layer weights are adjusted according to the local gradients of the nodes in the subsequent layer. 
 \subsubsection{MLP Advantages and disadvantages}
-The multilayer perceptron is suitable for non-linearly separable classification problems. Once a good approximate solution is found generalisation can be easily improved by adjusting the stopping criteria of the training algorithm or using regularisation. MLP is a global approximator (because it split's the entire pattern space using lines), which can be an advantage if we expect abnormal data points in unseen data and want to try to classify them. \\ 
+The multilayer perceptron is suitable for non-linearly separable classification problems. Once a good approximate solution is found generalisation can be easily improved by adjusting the stopping criteria of the training algorithm or using regularisation. MLP is a global approximator (because it splits the entire pattern space using lines), which can be an advantage if we expect abnormal data points in unseen data and want to try to classify them. 
+
 Determining the number of hidden layers and number of neurons in each layer may require a lot of experimentation. The training algorithm uses local gradients and can often get stuck in a local minimum of the error function. 
 
 
@@ -56,7 +66,8 @@ Determining the number of hidden layers and number of neurons in each layer may 
 \subsubsection{Radial Basis Function Network (RBFN)}
 RBFN is a feedforward neural network, consisting of single hidden layer, an input and an output layer. Input layer just distributes inputs to the hidden layer. Each neuron in the hidden layer computes a radially symmetric basis activation function (typically a Gaussian) from the inputs. The output layer neurons compute a weighted sum of the outputs of the hidden layer. Each neuron in the hidden layer has two associated parameters - a point in the feature space, which is called a center, and a spread. It computes it's response to a given input based on the euclidean distance between the data point and it's center. Training is typically done in two stages - center selection and weight estimation, where weights can be computed in a single matrix vector calculation. RBFNs can also be trained in a supervised manner (like MLP) or by selecting centres at each data point and using regularisation, but these approaches are much slower.
 \subsubsection{RBFN Advantages and Disadvantages}
-There is only one hidden layer so only the size needs to be determined experimentally. When using unsupervised center selection, weights can be computed in a single calculation. There are far less architecture parameters that need to be varied when searching for an  architecture compared to the MLP. The RBFN is a local approximator, which is an advantage when we expect new data to be in a similar range to the training data or when abnormal inputs need to be classified in one class. \\
+There is only one hidden layer so only the size needs to be determined experimentally. When using unsupervised center selection, weights can be computed in a single calculation. There are far less architecture parameters that need to be varied when searching for an  architecture compared to the MLP. The RBFN is a local approximator, which is an advantage when we expect new data to be in a similar range to the training data or when abnormal inputs need to be classified in one class. 
+
 It is difficult to determine center locations. When data isn't tightly clustered might need a very large hidden layer.  Supervised center selection and regularisation training approaches are very slow. 
 
 %\subsubsection{Correlation Matrix Memory(CMM)}
@@ -90,34 +101,42 @@ Comparing the two architectures stated above we choose an RBFN network architect
 %else to process a new batch of data for use with the trained network. If
 %you have transformed inputs using PCA, give the transformation matrix
 %as an appendix to the report.
-Three data sets are provided for training, validation and testing. The test sets are merged together in chronological order of the timestamps. This composite data set has 20,560 data points. The timestamps themselves are not used as features. The features used are Temperature, Humidity, Light, CO2, Humidity Ratio and are all real valued. The target outputs are binary. Hummidity Ratio has not been measured, it has been derived from Humidity measurements \cite{Candanedo2016}. 
+Three data sets are provided for training, validation and testing. The test sets are merged together in chronological order of the timestamps. This composite data set has 20,560 data points. The timestamps themselves are not used as features. The features used are Temperature, Humidity, Light, CO2, Humidity Ratio and are all real valued. The target outputs are binary. Hummidity Ratio has not been measured, it has been derived from Humidity measurements \cite{Candanedo2016}.
+
 
 In figure \ref{fig:plotmatrix} the MATLAB $gplotmatrix$ function is used to plot all input variables against each other and create histograms of each variable along the diagonal and classes are color coded. We can make several observations based on this plot. The plots of light against all other features show a clear separation of the two classes, so Light is probably an important feature. On the other hand the histogram of Light is bimodal and clearly the examples around the second peak are much less than around the first, which means they are under-represented and might not be properly incorporated in the model. Looking at CO2 we see that it's distribution is skewed, which also might cause problems for our model. The other distributions of variables look normal. 
 
 \begin{figure}[h]
-  \caption{Plot matrix}
   \centering
     \includegraphics[width=1\textwidth]{../figures/plotmatrix.png}
+	\caption{Plot matrix}    
     \label{fig:plotmatrix}
 \end{figure}
 
-There seems to be a big correlation between Hummidity and HummidityRatio, which makes sense since the later is derived from the first one. It might be a good idea to discard HummidityRatio. However to make sure that we are really removing unimportant features and be able to measure their contribution to the dataset we use Principal component analysis (PCA). PCA does two things. It orthogonalises input components to remove correlation between them. It can also be used measure components contribution to total variance of the data set and make a decision to remove principal components which have little contribution. Since PCA is sensitive to big variances in the data we first preprocess the data to have a variance of 1 (using Matlab $mapstd$ function) and then we apply PCA (Matlab $pca$ function). PCA gives us the eigenvectors and eigenvalues of the covariance matrix of the data. The eigenvectors are the transformed inputs (principal components) and the eigenvalues tell us how much each component contributes to the overall variance. Looking at figure \ref{fig:eigenvalues} we can see that the eigenvalue for the fifth principal component is only 0.001 and in terms of percentage, the contribution of this component to overall variance is 0.03\%. This means that the fifth principal component hardly has any contribution on the variance of the data. Removing it wouldn't affect the separability of the data but might make network training more efficient. The forth principal component has a much greater contribution to overall variance (6.3\%) so we decide keep it. The threashhold for eigenvalues of principal components has to be between the value of the forth and fifth. We decide to set it at 0.02. 
+
+There seems to be a big correlation between Hummidity and HummidityRatio, which makes sense since the later is derived from the first one. It might be a good idea to discard HummidityRatio. However to make sure that we are really removing unimportant features and be able to measure their contribution to the dataset we use Principal component analysis (PCA). PCA does two things. It orthogonalises input components to remove correlation between them. It can also be used measure components contribution to total variance of the data set and make a decision to remove principal components which have little contribution. Since PCA is sensitive to big variances in the data we first preprocess the data to have a variance of 1 (using Matlab $mapstd$ function) and then we apply PCA (Matlab $pca$ function). PCA gives us the eigenvectors and eigenvalues of the covariance matrix of the data. The eigenvectors are the transformed inputs (principal components) and the eigenvalues tell us how much each component contributes to the overall variance. Looking at figure \ref{fig:eigenvalues} we can see that the eigenvalue for the fifth principal component is only 0.001 and in terms of percentage, the contribution of this component to overall variance is 0.03\%. This means that the fifth principal component hardly has any contribution on the variance of the data. Removing it wouldn't affect the separability of the data but might make network training more efficient. The forth principal component has a much greater contribution to overall variance (6.3\%) so we decide keep it. The threshold for eigenvalues of principal components has to be between the value of the forth and fifth. We decide to set it at 0.02.
+
+
+Furthermore, looking at figure \ref{fig:pca_plotmatrix} we see that the distributions of all 4 principal components are more or less normal, which means we don't have to worry about potential problems arising from the skewed CO2 distribution or asymmetric bimodal distribution of Light.
+
 
 \begin{figure}[h]
-  \caption{Eigenvalues and percent contribution to overall variance of each principal components}
-  \centering
+  	\centering
     \includegraphics[width=1\textwidth]{../figures/eigenvalues.png}
+    \caption{Eigenvalues and percent contribution to overall variance of each principal components}
     \label{fig:eigenvalues}
 \end{figure}
 
-Furthermore, looking at figure \ref{fig:pca_plotmatrix} we see that the distributions of all 4 principal components are more or less normal, which means we don't have to worry about potential problems arising from the skewed CO2 distribution or asymmetric bimodal distribution of Light. 
+
+ 
 
 \begin{figure}[h]
-  \caption{Plot matrix of principal components}
-  \centering
+  	\centering
     \includegraphics[width=0.5\textwidth]{../figures/pca_plotmatrix.png}
-    \label{fig:pca_plotmatrix}
+    \caption{Plot matrix of principal components}
+	\label{fig:pca_plotmatrix}
 \end{figure}
+
 
 In the end, preprocessing of the input data consist of normalising variances of features to 1. And applying a transformation using principal component analysis, removing principal components with eigenvalues less than 0.02. We use the Matlab functions $x1, trans1 = mapstd(x)$ and $x2, trans2 = processpca(x1, 0.02)$. The transformation settings $trans1$ and $trans2$(including transformation matrices) are provided in the appendix in table \ref{table:mapstd} and table \ref{table:pca}.
   
@@ -155,6 +174,7 @@ There is a single hidden layer fully connected to the output layer. The optimal 
 \label{eq:rbf}
 \end{equation}
 
+
 Where $m$ is the number of hidden neurons (number of centres), $d_{max}$ is the maximum distance between centres, $\epsilon$ is a parameter used to vary the spread of the Gaussian ($0<\epsilon<2$) and $\boldsymbol{c_i}$ is the center vector of neuron $i$. The centres for each hidden layer neuron are found using a k-means clustering algorithm. The number of centres $\boldsymbol(c_i)$ and spread parameter $\epsilon$ were found through experimentation.
 
 \subsubsection{Output Layer}
@@ -163,6 +183,7 @@ The output layer calculates a weighted sum of hidden layer outputs:
 \begin{equation}
 y(\boldsymbol{x}) = \displaystyle\sum_{i=1}^{m} w_i \Phi_i(\boldsymbol{x})
 \end{equation}
+
 
 In order to obtain hard classification output a threshold is applied to $y(\boldsymbol{x})$ - if $y>0.5$ output is 1, else output is 0. The outputs use a boolean encoding, where 1 signifies occupancy.
 
@@ -215,8 +236,6 @@ The RBF network was implemented in Matlab following the solution from practical 
 %they are the toolbox defaults.
 Three types of RBFN training algorithms were considered - regularisation with number of hidden neurons equal to the number of data points, supervised center selection and unsupervised center selection. Unsupervised center selection was chosen out of the three because of it's performance in terms of speed. This is a two step training algorithm. The first step is selecting the center points for each hidden neuron. The second step is  calculating the output layer weights based on the outputs of the hidden layer in order to minimise an error function (MSE in this case). After having selected the center points and preprocessed the data, the training algorithms goes through the following steps, assuming center points are in a matrix $c$, preprocessed training data is in a matrix $x$, the target data is stored in a binary vector $D$ and the predefined number of centres is $m$:
 \begin{list}{•}{•}
-
-
 \item[1] Calculate the euclidean distance from each of the centres (columns of $c$) to each of the data points (columns in $x$) and store them in a matrix $distance$. Calculate the distances from centres to centres and store them in a matrix $dc$.  
 \item[2] Find the maximum center to center distance and store it in $d_{max}$. $d_{max}$ is then used to calculate the spread of all radial basis functions in the hidden layer: $\sigma^2 = \frac{1}{2}(\epsilon \times d_{max})^2$, where $\epsilon$ is a user defined parameter. 
 \item[3] Calculate a matrix of responses from each basis function to each data point. Using equation \ref{eq:rbf} this calculation would be:
@@ -225,6 +244,7 @@ F = \Phi_i(\boldsymbol{x}) = \exp\left(-\frac{m}{(\epsilon \times d_{max})^2} di
 \end{equation}
 \item[4] Calculate the weights of the output layer $W$ using the pseudo inverse of $F$, $F^+$ and the target data $D$: $W= F^+D$.
 \end{list}
+
 
 For the center selection step of the training algorithm two options were considered - random center selection and k-means clustering. The kmeans function from Matlab was used for the second approach, which uses k-means++ algorithm \cite{Arthur2007} for generating initial center locations and then runs the k-means clustering algorithm \cite{Lloyd82} to iteratively search for the true center locations. In order to decide which one to use an experiment was performed using two networks, structurally the same as the one in table \ref{table:architecture}, but with number of centres $m = 10, 15, 20, 25$ and $\epsilon = 1$. The two networks use the two different center selection algorithms. They were ran 10 times for each number of centres. The results are given below in table \ref{table:centermse}
 
@@ -246,6 +266,7 @@ K-means Test MSE Std & 0.0032 & 0.0044 & 0.0043 & 0.0041 \\
 \caption{Performance results for random centre selection and k-means}
 \label{table:centermse}
 \end{table}
+
 
 Clearly the performance (in terms of MSE) of k-means is much better than random center selection. So this is the algorithm we will use.
 
@@ -295,6 +316,7 @@ Initially we consider only the number of centres $m$ and search for networks wit
     \caption{Performance of RBFN with parameters $m = 5,15,20,25,30,40,50,60$ and $\epsilon = 1$, ran 10  times for each parameter combination.}\label{fig:performance}
 \end{figure}
 
+
 From figure \ref{fig:mse} we can see that the MSE decreases when increasing the number of nodes, as we expected. After 20 hidden nodes MSE decreases at a slower rate. Looking at figure \ref{fig:errorplot} we see that after around 20 hidden nodes the mean absolute difference in errors doesn't change very much and the total number of errors decreases very slowly. These two plots give us an understanding of how performance increases by increasing number of neurons, but tells us little about how much we are overfitting the data. Looking at figure \ref{fig:errorbar} we can see that after 25 hidden nodes the errors in class 1 remain the same, while the errors in class 0 decrease. After that point the network is developing a bias against class 0. This is a hint that we are overfitting after this point. On the other hand, when we use fewer than 20 nodes the bias of the network is against the other class. This probably means we don't have enough neurons to capture the structure of the data. So we decide to use 20 hidden nodes the hidden layer and perform experiments to determine the spread coefficient $\epsilon$, while keeping $m = 20$. The results are shown in figure \ref{fig:performance1}.
 
 \begin{figure}[h!]
@@ -321,6 +343,7 @@ From figure \ref{fig:mse} we can see that the MSE decreases when increasing the 
     \caption{Performance of RBFN with parameters $m = 20$ and $\epsilon = 0.6,0.7, 0.8, 0.9, 1.0, 1.1, 1.2$, ran 10  times for each parameter combination.}\label{fig:performance1}
 \end{figure}
 
+
 Looking at figure \ref{fig:mse1} we see that MSE reaches a local minimum around $\epsilon = 0.9$ and at that point the test set MSE is lower than the training set MSE. After $\epsilon = 1$ it starts decreasing, which indicates we might be ofverfitting again. Looking at \ref{fig:errorplot1}, we see that at $\epsilon = 0.8$ we get very low mean absolute difference in errors between the two classes. Furthermore, looking at \ref{fig:errorbar1} we see that at the same point the mean percentage of errors for both classes is around 1\% with a very small standard deviation. We choose $\epsilon = 0.8$ for our final architecture, as it  achieves a low MSE, a balance between errors in the two classes and stable results.
 
 
@@ -342,6 +365,7 @@ The final chosen architecture achieves an average MSE of 0.025. In tables \ref{t
 \caption{Mean train results for $m=20$, $\epsilon=0.8$ out of 20 runs.}
 \label{table:train_results}
 \end{table}
+
 
 On figure \ref{fig:accuracy} the confusion matrix ROC plot and error histograms are shown for a single run of the network.
 
@@ -369,6 +393,7 @@ On figure \ref{fig:accuracy} the confusion matrix ROC plot and error histograms 
     \caption{Performance of RBFN with parameters $m = 20$ and $\epsilon = 0.6,0.7, 0.8, 0.9, 1.0, 1.1, 1.2$, ran 10  times for each parameter combination.}\label{fig:accuracy}
 \end{figure}
 
+
 From the confusion matrix we see that the network achieves 96.4\% accuracy with a relatively equal distribution of errors in both classes. The ROC plot indicates a very good classifier as well. However on the error histogram we see that there are a lot of errors at the far right. This indicates that the network wasn't even close to classifying these data points correctly. These maybe points located near a class boundary which are misclassified due to noise or outliers, which are not in range of any of the RBF spreads. We also notice that the network shows a relatively small MSE even with a very small hidden layer. This could mean that the data we have isn't representative of the problem. Comparing the performance of the RBFN to that of the models proposed in \cite{Candanedo2016} we see that we get approximately the same accuracy as the models which use the same input variables.
 
 
@@ -385,7 +410,8 @@ The multilayer perceptron is a universal approximator. Given the right architect
 As mentioned already, there is plenty of historical data to train the network. Since the problem is time series prediction we will be using past energy consumption as inputs. Energy consumption is often dependant on the time of year, the first three input variables will be the energy consumption for the month before, this month and next month from last year (if we are predicting for July 2017, inputs are energy consumption for June, July, August 2016). We also take the average temperature from the weather forecast for these three past months as an input. Another sensible input value would be the energy efficiency score of the building(this might be country specific).
 The network is trained using backpropagation. The desired values are obtained from historical data from past years. The activation function of hidden layer neurons will be sigmoid, so normalizing input variables to the range 0-1 so they match the dynamic range of the activation function will speed up convergence. The input data will be split into training, validation and test sets (50/75/75). During training the error on the validation set will be monitored and used as a stopping criteria. Size and number of hidden layers need to be determined experimentally. If desired accuracy isn't achieved then regularisation can be used in the training. 
 \subsection{How the network would handle significant changes to building or environment}
-The energy consumption inputs of the network depend on the building they were measured in, so changes in building might affect the performance of the network significantly. The data we have for training should cover the range of buildings and climate zones, where we want the network to be deployed afterwards. Alternatively the network can be retrained on redeployment. \\
+The energy consumption inputs of the network depend on the building they were measured in, so changes in building might affect the performance of the network significantly. The data we have for training should cover the range of buildings and climate zones, where we want the network to be deployed afterwards. Alternatively the network can be retrained on redeployment. 
+
 The energy efficiency input, as mentioned might be country specific and might have different ranges, or categories. We can overcome this by normalising the values for different efficiency scales to the range 0-1. However the scales might differ in their criterion for determining energy efficiency(energy efficiency might mean one thing in the UK and another in the US, further research required on this). If this is the case the network won't generalise well in the different countries. If none of these approaches gives sensible results, more domain knowledge of the problem might be required to select more suitable inputs. 
 
 
@@ -402,7 +428,7 @@ The source of data will be sensors, part of the building managment system, which
 \subsection{How the network would handle significant changes to building or environment}
 The CMMs susceptibility to change of building or environment depends on the training examples. Given enough training data for different buildings in different environmental conditions the network will show good generalisation. On the other hand network can be trained over time by storing input patterns which prove to be false alarms. These patterns have to be stored manually by maintenance staff of the building for example.
 
-\bibliographystyle{plain}
+\bibliographystyle{ieeetr}
 \bibliography{science}
 
 

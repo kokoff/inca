@@ -1,51 +1,38 @@
 \begin{thebibliography}{1}
 
-\bibitem{Arthur2007}
-David Arthur and Sergei Vassilvitskii.
-\newblock K-means++: The advantages of careful seeding.
-\newblock In {\em Proceedings of the Eighteenth Annual ACM-SIAM Symposium on
-  Discrete Algorithms}, SODA '07, pages 1027--1035, Philadelphia, PA, USA,
-  2007. Society for Industrial and Applied Mathematics.
-
-\bibitem{wrro89505}
-Jim Austin, Tom Jackson, Victoria~Jane Hodge, and Grant Brewer.
-\newblock Aura-alert: The use of binary associative memories for condition
-  monitoring applications.
-\newblock In {\em CM 2010 The Seventh International Conference on Condition
-  Monitoring and Machinery Failure Prevention Technologies}, pages 699--711,
-  June 2010.
-
 \bibitem{Candanedo2016}
-Luis~M. Candanedo and Véronique Feldheim.
-\newblock Accurate occupancy detection of an office room from light,
-  temperature, humidity and \{CO2\} measurements using statistical learning
-  models.
-\newblock {\em Energy and Buildings}, 112:28 -- 39, 2016.
+L.~M. Candanedo and V.~Feldheim, ``Accurate occupancy detection of an office
+  room from light, temperature, humidity and \{CO2\} measurements using
+  statistical learning models,'' {\em Energy and Buildings}, vol.~112, pp.~28
+  -- 39, 2016.
 
-\bibitem{khosravani2016comparison}
-Hamid~R Khosravani, Mar{\'\i}a Del~Mar Castilla, Manuel Berenguel, Antonio~E
-  Ruano, and Pedro~M Ferreira.
-\newblock A comparison of energy consumption prediction models based on neural
-  networks of a bioclimatic building.
-\newblock {\em Energies}, 9(1):57, 2016.
+\bibitem{Arthur2007}
+D.~Arthur and S.~Vassilvitskii, ``K-means++: The advantages of careful
+  seeding,'' in {\em Proceedings of the Eighteenth Annual ACM-SIAM Symposium on
+  Discrete Algorithms}, SODA '07, (Philadelphia, PA, USA), pp.~1027--1035,
+  Society for Industrial and Applied Mathematics, 2007.
 
 \bibitem{Lloyd82}
-Stuart~P. Lloyd.
-\newblock Least squares quantization in pcm.
-\newblock {\em IEEE Transactions on Information Theory}, 28:129--137, 1982.
+S.~P. Lloyd, ``Least squares quantization in pcm,'' {\em IEEE Transactions on
+  Information Theory}, vol.~28, pp.~129--137, 1982.
+
+\bibitem{khosravani2016comparison}
+H.~R. Khosravani, M.~D.~M. Castilla, M.~Berenguel, A.~E. Ruano, and P.~M.
+  Ferreira, ``A comparison of energy consumption prediction models based on
+  neural networks of a bioclimatic building,'' {\em Energies}, vol.~9, no.~1,
+  p.~57, 2016.
 
 \bibitem{Narayanaswamy2014}
-Balakrishnan Narayanaswamy, Bharathan Balaji, Rajesh Gupta, and Yuvraj Agarwal.
-\newblock Data driven investigation of faults in hvac systems with model,
-  cluster and compare (mcc).
-\newblock In {\em Proceedings of the 1st ACM Conference on Embedded Systems for
-  Energy-Efficient Buildings}, BuildSys '14, pages 50--59, New York, NY, USA,
-  2014. ACM.
+B.~Narayanaswamy, B.~Balaji, R.~Gupta, and Y.~Agarwal, ``Data driven
+  investigation of faults in hvac systems with model, cluster and compare
+  (mcc),'' in {\em Proceedings of the 1st ACM Conference on Embedded Systems
+  for Energy-Efficient Buildings}, BuildSys '14, (New York, NY, USA),
+  pp.~50--59, ACM, 2014.
 
-\bibitem{Zhou1998}
-Ping Zhou and Jim Austin.
-\newblock {\em A Binary Correlation Matrix Memory k-NN Classifier}, pages
-  251--256.
-\newblock Springer London, London, 1998.
+\bibitem{wrro89505}
+J.~Austin, T.~Jackson, V.~J. Hodge, and G.~Brewer, ``Aura-alert: The use of
+  binary associative memories for condition monitoring applications,'' in {\em
+  CM 2010 The Seventh International Conference on Condition Monitoring and
+  Machinery Failure Prevention Technologies}, pp.~699--711, June 2010.
 
 \end{thebibliography}
