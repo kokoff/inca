@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2017.3.29)  24 APR 2017 09:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2017.3.29)  24 APR 2017 10:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -933,14 +933,14 @@ Package caption Info: End \AtBeginDocument code.
 [1
 
 {c:/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-<../figures/plotmatrix.png, id=18, 1156.32pt x 570.933pt>
+<../figures/plotmatrix.png, id=17, 1156.32pt x 570.933pt>
 File: ../figures/plotmatrix.png Graphic file (type png)
 
 <use ../figures/plotmatrix.png>
 Package pdftex.def Info: ../figures/plotmatrix.png used on input line 100.
 (pdftex.def)             Requested size: 452.9679pt x 223.64738pt.
 
-<../figures/eigenvalues.png, id=19, 1111.0308pt x 316.0608pt>
+<../figures/eigenvalues.png, id=18, 1111.0308pt x 316.0608pt>
 File: ../figures/eigenvalues.png Graphic file (type png)
 
 <use ../figures/eigenvalues.png>
@@ -950,17 +950,14 @@ Package pdftex.def Info: ../figures/eigenvalues.png used on input line 109.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<../figures/pca_plotmatrix.png, id=20, 421.575pt x 316.0608pt>
+[3 <../figures/plotmatrix.png (PNG copy)>]
+<../figures/pca_plotmatrix.png, id=23, 421.575pt x 316.0608pt>
 File: ../figures/pca_plotmatrix.png Graphic file (type png)
 
 <use ../figures/pca_plotmatrix.png>
 Package pdftex.def Info: ../figures/pca_plotmatrix.png used on input line 118.
 (pdftex.def)             Requested size: 226.48395pt x 169.8022pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[3 <../figures/plotmatrix.png (PNG copy)>] (./diagram.tex
+ (./diagram.tex
 Overfull \hbox (5.91814pt too wide) in paragraph at lines 28--28
  []\OT1/cmr/m/n/10.95 Hidden 
  []
@@ -978,30 +975,31 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 [4 <../figures/eigenvalues.png (PNG copy)> <../figures/pca_plotmatrix.png (PNG 
 copy)>]
-Overfull \hbox (44.69014pt too wide) in paragraph at lines 183--208
+Overfull \hbox (44.69014pt too wide) in paragraph at lines 174--199
  [][] 
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+[5]
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ¢ in font cmr10!
-[5] [6]
+ [6]
 <../figures/perf/mseplot_m(5-60)_e(10-10).png, id=42, 421.575pt x 316.0608pt>
 File: ../figures/perf/mseplot_m(5-60)_e(10-10).png Graphic file (type png)
 
 <use ../figures/perf/mseplot_m(5-60)_e(10-10).png>
 Package pdftex.def Info: ../figures/perf/mseplot_m(5-60)_e(10-10).png used on i
-nput line 286.
+nput line 277.
 (pdftex.def)             Requested size: 144.95303pt x 108.67456pt.
 
 <../figures/perf/errorplot_m(5-60)_e(10-10).png, id=43, 421.575pt x 316.0608pt>
 File: ../figures/perf/errorplot_m(5-60)_e(10-10).png Graphic file (type png)
 <use ../figures/perf/errorplot_m(5-60)_e(10-10).png>
 Package pdftex.def Info: ../figures/perf/errorplot_m(5-60)_e(10-10).png used on
- input line 293.
+ input line 284.
 (pdftex.def)             Requested size: 144.95303pt x 108.67456pt.
 
 <../figures/perf/errorbar_m(5-60)_e(10-10).png, id=44, 421.575pt x 316.0608pt>
@@ -1009,7 +1007,7 @@ File: ../figures/perf/errorbar_m(5-60)_e(10-10).png Graphic file (type png)
 
 <use ../figures/perf/errorbar_m(5-60)_e(10-10).png>
 Package pdftex.def Info: ../figures/perf/errorbar_m(5-60)_e(10-10).png used on 
-input line 300.
+input line 291.
 (pdftex.def)             Requested size: 144.95303pt x 108.67456pt.
 
 
@@ -1021,14 +1019,14 @@ File: ../figures/perf/mseplot_m(20-20)_e(6-12).png Graphic file (type png)
 
 <use ../figures/perf/mseplot_m(20-20)_e(6-12).png>
 Package pdftex.def Info: ../figures/perf/mseplot_m(20-20)_e(6-12).png used on i
-nput line 312.
+nput line 303.
 (pdftex.def)             Requested size: 144.95303pt x 108.67456pt.
 
 <../figures/perf/errorplot_m(20-20)_e(6-12).png, id=50, 421.575pt x 316.0608pt>
 File: ../figures/perf/errorplot_m(20-20)_e(6-12).png Graphic file (type png)
 <use ../figures/perf/errorplot_m(20-20)_e(6-12).png>
 Package pdftex.def Info: ../figures/perf/errorplot_m(20-20)_e(6-12).png used on
- input line 319.
+ input line 310.
 (pdftex.def)             Requested size: 144.95303pt x 108.67456pt.
 
 <../figures/perf/errorbar_m(20-20)_e(6-12).png, id=51, 421.575pt x 316.0608pt>
@@ -1036,7 +1034,7 @@ File: ../figures/perf/errorbar_m(20-20)_e(6-12).png Graphic file (type png)
 
 <use ../figures/perf/errorbar_m(20-20)_e(6-12).png>
 Package pdftex.def Info: ../figures/perf/errorbar_m(20-20)_e(6-12).png used on 
-input line 326.
+input line 317.
 (pdftex.def)             Requested size: 144.95303pt x 108.67456pt.
  [8 <../figures/perf/mseplot_m(5-60)_e(10-10).png (PNG copy)> <../figures/perf/
 errorplot_m(5-60)_e(10-10).png (PNG copy)> <../figures/perf/errorbar_m(5-60)_e(
@@ -1047,21 +1045,21 @@ errorbar_m(20-20)_e(6-12).png (PNG copy)>] <../figures/final/confmat.png, id=55
 File: ../figures/final/confmat.png Graphic file (type png)
 
 <use ../figures/final/confmat.png>
-Package pdftex.def Info: ../figures/final/confmat.png used on input line 360.
+Package pdftex.def Info: ../figures/final/confmat.png used on input line 351.
 (pdftex.def)             Requested size: 144.95303pt x 105.60649pt.
 
 <../figures/final/roc.png, id=56, 527.0892pt x 527.0892pt>
 File: ../figures/final/roc.png Graphic file (type png)
 
 <use ../figures/final/roc.png>
-Package pdftex.def Info: ../figures/final/roc.png used on input line 367.
+Package pdftex.def Info: ../figures/final/roc.png used on input line 358.
 (pdftex.def)             Requested size: 144.95303pt x 144.954pt.
 
 <../figures/final/errhist.png, id=57, 421.575pt x 316.0608pt>
 File: ../figures/final/errhist.png Graphic file (type png)
 
 <use ../figures/final/errhist.png>
-Package pdftex.def Info: ../figures/final/errhist.png used on input line 374.
+Package pdftex.def Info: ../figures/final/errhist.png used on input line 365.
 (pdftex.def)             Requested size: 144.95303pt x 108.67456pt.
  [9 <../figures/final/confmat.png (PNG copy)> <../figures/final/roc.png (PNG co
 py)> <../figures/final/errhist.png (PNG copy)>] [10] [11] (./assignment_2.bbl
@@ -7433,22 +7431,22 @@ Package xcolor Warning: Incompatible color definition on input line 69.
 Package xcolor Warning: Incompatible color definition on input line 69.
 
 [20]) [21]
-Overfull \hbox (2.98427pt too wide) in paragraph at lines 459--460
+Overfull \hbox (2.98427pt too wide) in paragraph at lines 450--451
 [][] 
  []
 
 
-Overfull \hbox (15.69843pt too wide) in paragraph at lines 496--497
+Overfull \hbox (15.69843pt too wide) in paragraph at lines 487--488
 [][] 
  []
 
 
-Overfull \hbox (21.17343pt too wide) in paragraph at lines 503--504
+Overfull \hbox (21.17343pt too wide) in paragraph at lines 494--495
 [][] 
  []
 
 
-Overfull \hbox (17.46259pt too wide) in paragraph at lines 510--511
+Overfull \hbox (17.46259pt too wide) in paragraph at lines 501--502
 [][] 
  []
 
@@ -7456,7 +7454,7 @@ Overfull \hbox (17.46259pt too wide) in paragraph at lines 510--511
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Overfull \hbox (27.07426pt too wide) in paragraph at lines 517--518
+Overfull \hbox (27.07426pt too wide) in paragraph at lines 508--509
 [][] 
  []
 
@@ -7471,7 +7469,7 @@ Here is how much of TeX's memory you used:
  34218 multiletter control sequences out of 15000+600000
  13123 words of font info for 46 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 69i,20n,100p,1712b,2062s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 69i,20n,100p,1754b,2062s stack positions out of 5000i,500n,10000p,200000b,80000s
 <c:/texlive/2016/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmbx10.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmbx12.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10
@@ -7487,7 +7485,7 @@ b><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texli
 ve/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2016/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2016/texmf-dist/
 fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on assignment_2.pdf (23 pages, 1000593 bytes).
+Output written on assignment_2.pdf (23 pages, 1000722 bytes).
 PDF statistics:
  158 PDF objects out of 1000 (max. 8388607)
  103 compressed objects within 2 object streams
