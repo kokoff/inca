@@ -48,7 +48,7 @@ Open Examination}
 \section{Architecture Discussion}
 
 \subsection{Problem}
-The problem is a two class classification problem - occupancy detection based on sensor readings. The recorded sensor data is temperature, humidity, light and carbon dioxide. The features include an additional derived feature, humidity ratio, which was derived from the original recorded variables. Each point in the data set is also timestamped. In \cite{Candanedo2016} the time stamp was used to derive two additional features - week status(WS) and number of seconds from midnight(NSM).
+The problem is a two class classification problem - occupancy detection based on sensor readings. The data includes sensor readings for temperature, humidity, light and carbon dioxide. An additional feature, humidity ratio, was derived from the original recorded variables. Each point in the data set is also timestamped. In \cite{Candanedo2016} the time stamp was used to derive two additional features - week status(WS) and number of seconds from midnight(NSM).
 
 A certain amount of noise is expected in the recorded data so a suitable architecture should have good generalisation. Since data was measured in a controlled environment we expect the range of training variables to roughly match the range of expected new data.
 
