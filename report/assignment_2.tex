@@ -25,54 +25,60 @@
 \usepackage{standalone}
 \usepackage{subcaption}
 
+
+
 \begin{document}
-%Header-Make sure you update this information!!!!
-\noindent
+
+\title{Introduction to Neural Computing and Applications (INCA)
+Open Examination}
+\author{Exam Number: Y1403115}
+\date{}
+\maketitle
 
 
 \part*{Section A}
-\section*{Architecture Discussion}
+\section{Architecture Discussion}
 
-\subsection*{Problem}
+\subsection{Problem}
 The problem is a two class classification problem - occupancy detection based on sensor readings. The recorded sensor data is temperature, humidity, light and carbon dioxide. The features include an additional derived feature, humidity ratio, which was derived from the original recorded variables. Each point in the data set is also timestamped. In \cite{Candanedo2016} the time stamp was used to derive two additional features - week status(WS) and number of seconds from midnight(NSM).
-A certain amount of noise is expected in the recorded data so a suitable architecture should have good generalisation. Since data was measured in a controlled environment we expect the range of training variables to roughly match the range of expected data.
+A certain amount of noise is expected in the recorded data so a suitable architecture should have good generalisation. Since data was measured in a controlled environment we expect the range of training variables to roughly match the range of expected new data.
 
-\subsection*{Architectures}
+\subsection{Architectures}
 There are several neural network architectures suitable for this kind of classification problem. We will consider Multilayer perceptron and Radial basis function network. 
-\subsubsection*{Multilayer Perceptron (MLP)}
-MLP is a feedforward neural network with multiple neurons composed in multiple layers. All neurons are the same in the case of classification and they compute a weighted sum of inputs and apply an activation function (sigmoid or tanh). There is an input layer, which distributes the inputs, zero or more hidden layers and an output layer. Each layer feeds into the next one. This type of neural network uses and error correcting learning rule and a backpropagation training algorithm. Backpropagation consists of two stages - a forward pass, where outputs are computed and a backward pass where weights are adjusted according to the error in outputs. In the backward pass the output layer weights are adjusted according to the local gradient of the error function and the hidden layer weights are adjusted according to the local gradients of the nodes in the subsequent layer. 
-\subsubsection*{MLP Advantages and disadvantages}
-The multilayer perceptron is suiatable for nonlinearly seperable classification problems. Once a good aproximate solution is found generalisation can be easyly improved by adjusting the stopping criteria of the training algorithm or using regularisation. MLP is a global approximator (because it split's the entire pattern space using lines), which can be an advantage if dataset we have doesn't describe the full range of expected data. \\ 
+\subsubsection{Multilayer Perceptron (MLP)}
+MLP is a feedforward neural network with multiple neurons composed in multiple layers. All neurons are the same in the case of classification and they compute a weighted sum of inputs and apply an activation function (sigmoid or tanh). There is an input layer, which distributes the inputs, zero or more hidden layers and an output layer. Each layer feeds into the next one. This type of neural network uses an error correcting learning rule and a backpropagation training algorithm. Backpropagation consists of two stages - a forward pass, where outputs are computed and a backward pass where weights are adjusted according to the error in outputs. In the backward pass the output layer weights are adjusted according to the local gradient of the error function and the hidden layer weights are adjusted according to the local gradients of the nodes in the subsequent layer. 
+\subsubsection{MLP Advantages and disadvantages}
+The multilayer perceptron is suitable for non-linearly separable classification problems. Once a good approximate solution is found generalisation can be easily improved by adjusting the stopping criteria of the training algorithm or using regularisation. MLP is a global approximator (because it split's the entire pattern space using lines), which can be an advantage if we expect abnormal data points in unseen data and want to try to classify them. \\ 
 Determining the number of hidden layers and number of neurons in each layer may require a lot of experimentation. The training algorithm uses local gradients and can often get stuck in a local minimum of the error function. 
 
 
 %MLP is a feedforward, multilayer architecture consisting of one input layer, one output layer and hidden layers. The input layer just passes on the inputs. Each neuron in the hidden layers computes a weighted sum of inputs, applies a transfer function and passes it's output to each neuron in the next layer. Each layer feeds into the next and the output layer produces the outputs. The MLP uses an error correction learning rule, where it minimises an error function defined by the difference of it's output and the desired output (typically the error function is mean squared error). In order to minimise the error function, it needs to be continuous, therefore the transfer function of each neuron is either a hyperbolic tangent function or a sigmoid function. The training algorithm for MLP is backpropagation. It consists of a forward pass, where the network computes it's output and a backward pass, where the weights are adjusted. Weight changes at each layer are computed based on the local gradient of the next layer. The MLP classifies patterns by partitioning the feature space into regions. It can be used to solve linearly inseparable classification problems, as each layer computes a non-linear transformation of the outputs of the previouse one.
-\subsubsection*{Radial Basis Function Network (RBFN)}
-RBFN is a feedforward network, consisting of single hidden layer and an input and output layer. Input layer just distributes inputs to the hidden layer. Each neuron in the hidden layer computes a radially symmetric basis activation function (typically a Gaussian) from the inputs. The output layer neurons compute a weighted sum of the outputs of the hidden layer. Each neuron in the hidden layer has two associated parameters - a point in the feature space, which is called a center, and a spread. It computes it's response to a given input based on the euclidean distance between the data point and it's center. Training is typically done in two stages - center selection and weight estimation, where wighgts can be cimputed in a single matrix vector calculation. RBFNs can also be trained in a supervised manner (like MLP) or by selecting centers at each data point and using regularisation, but these aproaches are much slower.
-\subsubsection*{RBFN Advantages and Disadvantages}
-There is only one hidden layer so we only need to experiment with it's size. When using unsupervised center selection, weights can be computed in a single calculation. There are much less architecture parameters that can be varied when searching for an  architecture compared to the MLP. The RBFN is a local approximator, which is an advantage when we expect new data to be in a similar range to the training data or when abnormal inputs need to be ignored. \\
-It is difficult to determine center locations. When data isn't clustered might need a very large hidden layer.  Supervised center selection and regularisation training approaches are very slow. 
+\subsubsection{Radial Basis Function Network (RBFN)}
+RBFN is a feedforward neural network, consisting of single hidden layer, an input and an output layer. Input layer just distributes inputs to the hidden layer. Each neuron in the hidden layer computes a radially symmetric basis activation function (typically a Gaussian) from the inputs. The output layer neurons compute a weighted sum of the outputs of the hidden layer. Each neuron in the hidden layer has two associated parameters - a point in the feature space, which is called a center, and a spread. It computes it's response to a given input based on the euclidean distance between the data point and it's center. Training is typically done in two stages - center selection and weight estimation, where weights can be computed in a single matrix vector calculation. RBFNs can also be trained in a supervised manner (like MLP) or by selecting centres at each data point and using regularisation, but these approaches are much slower.
+\subsubsection{RBFN Advantages and Disadvantages}
+There is only one hidden layer so only the size needs to be determined experimentally. When using unsupervised center selection, weights can be computed in a single calculation. There are far less architecture parameters that need to be varied when searching for an  architecture compared to the MLP. The RBFN is a local approximator, which is an advantage when we expect new data to be in a similar range to the training data or when abnormal inputs need to be classified in one class. \\
+It is difficult to determine center locations. When data isn't tightly clustered might need a very large hidden layer.  Supervised center selection and regularisation training approaches are very slow. 
 
-%\subsubsection*{Correlation Matrix Memory(CMM)}
+%\subsubsection{Correlation Matrix Memory(CMM)}
 %CMMs are single layer neural networks, which use the Hebbian learning rule. They consist of a single weight matrix which stores correlations between input and output patterns. Learning is done by computing the outer product of the input and output and adding it to the outer products of all other patterns to form the weight matrix. Recall of a stored pattern is done by multiplying the weight matrix and the input. For efficiency these networks usually have binary inputs and weights. In order to use a CMM as a classifier the output needs to be threasholded, so the highest output value is set to 1 and represents the class, or some kind of postprocessing needs to be done such as the one used in \cite{Zhou1998}.  
-%\subsubsection*{CMM advantages and disadvantages}
+%\subsubsection{CMM advantages and disadvantages}
 %A hardware implementation of CMM can be very fast. Training and recall are both very fast operations. \\
 %A CMM can store a limited number of pattern associations after which new associations become diluted. Real valued data needs to be encoded using a binning algorithm. Best performance requires input patterns to follow a uniform distribution. Good classification might require additional post processing (e.g. k nearest neighbours).
 
-%\subsubsection*{Advantages/Disadvantages}
+%\subsubsection{Advantages/Disadvantages}
 %The Perceptron is a very simple and quick to train network consisting of a single neuron. However it can easily be ruled out because of it's inability to classify linearly inseperable problems. From figure \ref{fig:plotmatrix} we can clearly see that our data is linearly inseperable when looking at the relation between Hummidity and CO2 for example. 
 %The MLP is suatable for solving non-linearly seperable problems. It's iterative training process can be slow depending on the error function minimisation method used, however it is very customisable. Once a good aproximate solution is found generalisation can be easyly improved by adjusting the stopping criteria of the training or employing regularisation. Choosing the right size of the network might require a lot of trial and error. The MLP is global aproximator, which might be an advantage when we could expect new data to be significantly different from training data.
 %The RBFN has a single hidden layer. Training can be very slow when using supervised selection of centers or regularisation. There are much less architecture parameters that can be varied when searching for a suitable architecture compared to the MLP. The RBFN is a local aproximator, which is an advantage when we expect new data to be in a similar range to the training data and can also be used for detecting abnormal inputs. 
 
-%\subsection*{Data exploration}
+%\subsection{Data exploration}
 %All features - Temperature, Humidity, Light, CO2, Humidity Ratio are real valued. In figure \ref{fig:plotmatrix} the MATLAB $gplotmatrix$ function is used to plot all variables against each other and create histograms of each variable along the diagonal and class are color coded.  
 
-\subsubsection*{Choice of network architecture}
-Comparing the two architectures stated above we choose an RBFN network architecture. Compared to the MLP the RBFN has a simpler training process. Furthermore, using our knowledge of the problem we can see that the data we have should more or less be like the expected data after training. Because of this an RBFM would be more suitable as a local classifier rather than an MLP. There are far less training parameters that have to be discovered experimentally when using an RBFN
+\subsubsection{Choice of network architecture}
+Comparing the two architectures stated above we choose an RBFN network architecture. Compared to the MLP the RBFN has a simpler training process. Furthermore, using our knowledge of the problem we can see that the range of data we have should more or less match the expected range of unseen data, because the deployment environment is controlled. This means a local classifier would be more suitable than an global classifier. There are far less training parameters that have to be discovered experimentally when using an RBFN.
 
-\section*{Creation and Application}
+\section{Creation and Application}
 
-\subsection*{Data}
+\subsection{Data}
 %• Data [10 marks]
 %Describe (briefly) the data you have, and how much there is of it.
 %Describe the inputs to (and outputs from) the network. You need to
@@ -84,9 +90,9 @@ Comparing the two architectures stated above we choose an RBFN network architect
 %else to process a new batch of data for use with the trained network. If
 %you have transformed inputs using PCA, give the transformation matrix
 %as an appendix to the report.
-Three data sets are provided for training, validation and testing. The test sets are merged together according to the chronological order of the timestamps. The composite test set has 20,560 data points The timestamps themselves are not used as features. The features are Temperature, Humidity, Light, CO2, Humidity Ratio and are all real valued. The target outputs are binary. Hummidity Ratio has not been measured, it has been derived from Humidity measurements \cite{Candanedo2016}. 
+Three data sets are provided for training, validation and testing. The test sets are merged together in chronological order of the timestamps. This composite data set has 20,560 data points. The timestamps themselves are not used as features. The features used are Temperature, Humidity, Light, CO2, Humidity Ratio and are all real valued. The target outputs are binary. Hummidity Ratio has not been measured, it has been derived from Humidity measurements \cite{Candanedo2016}. 
 
-In figure \ref{fig:plotmatrix} the MATLAB $gplotmatrix$ function is used to plot all input variables against each other and create histograms of each variable along the diagonal and classes are color coded. We can make several observations based on this plot. The plots of light against all other features show a clear separation of the two classes, so light is probably an important feature. On the other hand the histogram of light is bimodal and clearly the examples around the second peak are much less than around the first, which means they are under-represented and might not be properly incorporated in the model. Looking at CO2 we see that it's distribution is skewed, which also might cause problems for our model. The other distributions of variables look normal. 
+In figure \ref{fig:plotmatrix} the MATLAB $gplotmatrix$ function is used to plot all input variables against each other and create histograms of each variable along the diagonal and classes are color coded. We can make several observations based on this plot. The plots of light against all other features show a clear separation of the two classes, so Light is probably an important feature. On the other hand the histogram of Light is bimodal and clearly the examples around the second peak are much less than around the first, which means they are under-represented and might not be properly incorporated in the model. Looking at CO2 we see that it's distribution is skewed, which also might cause problems for our model. The other distributions of variables look normal. 
 
 \begin{figure}[h]
   \caption{Plot matrix}
@@ -95,7 +101,7 @@ In figure \ref{fig:plotmatrix} the MATLAB $gplotmatrix$ function is used to plot
     \label{fig:plotmatrix}
 \end{figure}
 
-There seems to be a big correlation between Hummidity and HummidityRatio, which makes sense since the later is derived from the first one. It might be a good idea to discard HummidityRatio. However to make sure that we are really removing unimportant features and be able to measure their contribution to the dataset we use Principal component analysis (PCA). PCA does two things. It orthogonalises input components to remove correlation between them. It can also be used to remove principal components which have very little contribution towards the total variance of the data. Since PCA is sensitive to big variances in the data we first preprocess the data to have a variance of 1 (using Matlab $mapstd$ function) and then we apply PCA (Matlab $pca$ function). PCA gives us the eigenvectors and eigenvalues of the covariance matrix of the data. The eigenvectors are the transformed inputs (prinicpal components) and the eigenvalues tell us how much each component contributes to the overall variance. Looking at figure \ref{fig:eigenvalues} we can see that the eigenvalue for the fifth principal component is only 0.001 and in terms of percentage, the contribution of this component to overall variance is 0.03\%. This means that the fifth principal component hardly has any contribution on the variance of the data. Removing it wouldn't affect the separability of the data but might make network training more efficient. The forth principal component has a much greater contribution to overall variance (6.3\%) so we decide keep it. The threashhold for eigenvalues of principal components has to be between the value of the forth and fifth. We decide to set it at 0.02. 
+There seems to be a big correlation between Hummidity and HummidityRatio, which makes sense since the later is derived from the first one. It might be a good idea to discard HummidityRatio. However to make sure that we are really removing unimportant features and be able to measure their contribution to the dataset we use Principal component analysis (PCA). PCA does two things. It orthogonalises input components to remove correlation between them. It can also be used measure components contribution to total variance of the data set and make a decision to remove principal components which have little contribution. Since PCA is sensitive to big variances in the data we first preprocess the data to have a variance of 1 (using Matlab $mapstd$ function) and then we apply PCA (Matlab $pca$ function). PCA gives us the eigenvectors and eigenvalues of the covariance matrix of the data. The eigenvectors are the transformed inputs (principal components) and the eigenvalues tell us how much each component contributes to the overall variance. Looking at figure \ref{fig:eigenvalues} we can see that the eigenvalue for the fifth principal component is only 0.001 and in terms of percentage, the contribution of this component to overall variance is 0.03\%. This means that the fifth principal component hardly has any contribution on the variance of the data. Removing it wouldn't affect the separability of the data but might make network training more efficient. The forth principal component has a much greater contribution to overall variance (6.3\%) so we decide keep it. The threashhold for eigenvalues of principal components has to be between the value of the forth and fifth. We decide to set it at 0.02. 
 
 \begin{figure}[h]
   \caption{Eigenvalues and percent contribution to overall variance of each principal components}
@@ -104,7 +110,7 @@ There seems to be a big correlation between Hummidity and HummidityRatio, which 
     \label{fig:eigenvalues}
 \end{figure}
 
-Furthermore, looking at figure \ref{fig:pca_plotmatrix} we see that the distributions of all 4 principal components are more or less normal, which means we don't have to worry about potential problems arising from the skewed CO2 distribution or asymetric bimodal distribution of Light. 
+Furthermore, looking at figure \ref{fig:pca_plotmatrix} we see that the distributions of all 4 principal components are more or less normal, which means we don't have to worry about potential problems arising from the skewed CO2 distribution or asymmetric bimodal distribution of Light. 
 
 \begin{figure}[h]
   \caption{Plot matrix of principal components}
@@ -113,20 +119,11 @@ Furthermore, looking at figure \ref{fig:pca_plotmatrix} we see that the distribu
     \label{fig:pca_plotmatrix}
 \end{figure}
 
-In the end, preprocessing of the input data consist of normalising variances of features to 1. And applying a transformation using principal component analysis, removing principal components with eigenvalues less than 0.02. We use the Matlab functions $x1, trans1 = mapstd(x)$ and $x2, trans2 = processpca(x1, 0.02)$. The transformation settings $trans1$ and $trans2$ are provided in the appendix in table \ref{table:mapstd} and table \ref{table:pca}.
+In the end, preprocessing of the input data consist of normalising variances of features to 1. And applying a transformation using principal component analysis, removing principal components with eigenvalues less than 0.02. We use the Matlab functions $x1, trans1 = mapstd(x)$ and $x2, trans2 = processpca(x1, 0.02)$. The transformation settings $trans1$ and $trans2$(including transformation matrices) are provided in the appendix in table \ref{table:mapstd} and table \ref{table:pca}.
   
 
 
-
-
-
-
-
-
-
-
-
-\subsection*{Network}
+\subsection{Network}
 \begin{figure}[h]
 \centering
   \includestandalone[width=0.5\textwidth]{diagram}%     without .tex extension
@@ -142,13 +139,13 @@ In the end, preprocessing of the input data consist of normalising variances of 
 %a diagram.
 %You should also indicate how you implemented it. This could be brief if
 %you have used MATLAB defaults, for example.
-\subsubsection*{Inputs}
+\subsubsection{Inputs}
 Inputs are preprocessed before they are presented to the network. The data set is then randomly split into a training set and a test set with ratio 75\%/25\%.
 
-\subsubsection*{Input Layer}
+\subsubsection{Input Layer}
 The input layer distributes inputs, after preprocessing, to each neuron in the hidden layer. The size of the input layer is therefore the size of the input vector $N=4$ (after PCA). It is fully connected to the hidden layer.
 
-\subsubsection*{Hidden Layer}
+\subsubsection{Hidden Layer}
 There is a single hidden layer fully connected to the output layer. The optimal size of the hidden layer found by experimentation is $M=20$. The activation function of each neuron is an isotropic Gaussian:
 
 \begin{equation}
@@ -160,7 +157,7 @@ There is a single hidden layer fully connected to the output layer. The optimal 
 
 Where $m$ is the number of hidden neurons (number of centres), $d_{max}$ is the maximum distance between centres, $\epsilon$ is a parameter used to vary the spread of the Gaussian ($0<\epsilon<2$) and $\boldsymbol{c_i}$ is the center vector of neuron $i$. The centres for each hidden layer neuron are found using a k-means clustering algorithm. The number of centres $\boldsymbol(c_i)$ and spread parameter $\epsilon$ were found through experimentation.
 
-\subsubsection*{Output Layer}
+\subsubsection{Output Layer}
 The output layer calculates a weighted sum of hidden layer outputs:
 
 \begin{equation}
@@ -169,7 +166,7 @@ y(\boldsymbol{x}) = \displaystyle\sum_{i=1}^{m} w_i \Phi_i(\boldsymbol{x})
 
 In order to obtain hard classification output a threshold is applied to $y(\boldsymbol{x})$ - if $y>0.5$ output is 1, else output is 0. The outputs use a boolean encoding, where 1 signifies occupancy.
 
-\subsubsection*{Best found architecture}
+\subsubsection{Best found architecture}
 The best architecture found through experimentation uses k-means algorithm to find center locations. The experimentally discovered parameter values are $m = 20, \epsilon = 0.8$. The network architecture and parameters are given below in table \ref{table:architecture}.
 
 \begin{table}[h!]
@@ -203,11 +200,11 @@ $  \\
 \label{table:architecture}
 \end{table}
 
-\subsubsection*{Implementation}
+\subsubsection{Implementation}
 The RBF network was implemented in Matlab following the solution from practical session. The code is given in the appendix (RBFN.m). For performing experiments an additional script was used it is also provided in the appendix (runRBFN.m)
 
 
-\subsection*{Training}
+\subsection{Training}
 %Explain how you selected the best training algorithm for this problem.
 %This could include testing different networks and training algorithms to
 %see what might work well.
@@ -252,7 +249,7 @@ K-means Test MSE Std & 0.0032 & 0.0044 & 0.0043 & 0.0041 \\
 
 Clearly the performance (in terms of MSE) of k-means is much better than random center selection. So this is the algorithm we will use.
 
-\subsection*{Evaluation}
+\subsection{Evaluation}
 %In selecting the final network you will have to make choices about, for
 %example, the number of neurons or the number of layers to use.
 %– Explain what metric or metrics you used for comparison between
@@ -266,12 +263,12 @@ Clearly the performance (in terms of MSE) of k-means is much better than random 
 %was it split into training, validation and test sets? How big were
 %they?
 We have made decisions about the network structure, training algorithm, data preprocessing and splitting into training and test sets. The parameters that need to be discovered experimentally are the number of centres (size of hidden layer) and basis function spread parameter $\epsilon$, which we introduced in the Network section.
-\subsubsection*{Metrics}
+\subsubsection{Metrics}
 MSE was used as a metric of performance. However MSE on it's own is not sufficient, because it will keep decreasing as we increase the number of nodes in the network, but if we add two many nodes the generalisation of the network will be poor. This is why in addition to MSE, we also look at the percentage of errors in each of the two classes. Ideally we want our model to make an approximately equal amount of errors in both classes. If the model develops a bias against a particular class this means that we are probably over fitting the data or not capturing the structure of the data.
 
 
 
-\subsubsection*{Experimentation for determining final network}
+\subsubsection{Experimentation for determining final network}
 Initially we consider only the number of centres $m$ and search for networks with low MSE and approximately equal percentage of errors in both classes. We set the spread parameter of the network $\epsilon = 1$ and run for different hidden layer sizes $m = 5, 10, 15, 20, 25, 30, 40, 50, 60$. For each value of $m$ we train and evaluate the network 10 times and record the mean value of MSE, mean percentage of errors and mean absolute difference of errors for both the training and test sets. Results are plotted in figure \ref{fig:performance}.
 
 \begin{figure}[h!]
@@ -327,7 +324,7 @@ From figure \ref{fig:mse} we can see that the MSE decreases when increasing the 
 Looking at figure \ref{fig:mse1} we see that MSE reaches a local minimum around $\epsilon = 0.9$ and at that point the test set MSE is lower than the training set MSE. After $\epsilon = 1$ it starts decreasing, which indicates we might be ofverfitting again. Looking at \ref{fig:errorplot1}, we see that at $\epsilon = 0.8$ we get very low mean absolute difference in errors between the two classes. Furthermore, looking at \ref{fig:errorbar1} we see that at the same point the mean percentage of errors for both classes is around 1\% with a very small standard deviation. We choose $\epsilon = 0.8$ for our final architecture, as it  achieves a low MSE, a balance between errors in the two classes and stable results.
 
 
-\subsection*{Results}
+\subsection{Results}
 %Give a synopsis of the results obtained from the final selected network.
 %Relate these results back to the problem as stated – a MSE on its own
 %is not helpful in judging how well something works.
@@ -378,30 +375,30 @@ From the confusion matrix we see that the network achieves 96.4\% accuracy with 
 \part*{Section B}
 
 
-\section*{Building energy consumption prediction}
+\section{Building energy consumption prediction}
 The problem of predicting energy consumption of a building can be very important for places where energy consumption goes up in colder months, while energy production goes down. The chosen network is a Multilayer Perceptron. A similar problem solved with neural networks can be seen in \cite{khosravani2016comparison}.
-\subsection*{Technical features of architecture}
+\subsection{Technical features of architecture}
 MLP is a feedforward, multilayer architecture consisting of one input layer, one output layer and one or more hidden layers. The input layer distributes the inputs. Each neuron in the hidden layers computes a weighted sum of inputs, applies an activation function and produces an output. Each layer is fully connected to the next one. The output layer produces the outputs. The MLP uses an error correction learning rule, where it minimises an error function defined by the difference of it's output and the desired output (typically the error function is mean squared error). The activation functions for all hidden layer neurons are either hyperbolic tangent functions or a sigmoid functions. In the case of regression, the output layer has a linear activation function. The training algorithm for MLP is backpropagation. It consists of a forward pass, where the network computes it's output and a backward pass, where the weights are adjusted. Weight changes at each layer are computed based on the local gradient of the next layer. The MLP partitions the feature space into regions (using straight lines in the 2D case). 
-\subsection*{Suitability of the architecture for your application}
+\subsection{Suitability of the architecture for your application}
 The multilayer perceptron is a universal aproximator. Given the right architecture and enough data it can approximate any function. The training process is slow and has to be done before the network is deployed. MLP also requires a large amount of data to be trained and the data needs to be representative of the problem. However once deployed the network can produce outputs very quickly. MLP is suitable for this particular problem because there is already a lot of historical energy consumption data available to train the network. It might be susceptible to changes in building, depending on the data used as inputs. Data about lots of different buildings might be required in order to achieve good generalisation.
-\subsection*{Source of data, and how the network might be trained}
+\subsection{Source of data, and how the network might be trained}
 As mentioned already, there is plenty of historical data to use as inputs to our network. Since the problem is time series prediction we will be using past energy consumption as inputs. Since energy consumption is often dependant on the time of year, the first three input variables will be the energy consumption for the month before, this month and next month last year (if we are predicting for July 2017, inputs are energy consumption for June, July, August 2016). We also take the average temperature from the weather forecast for these three past months as an input. Another sensible input value would be the energy efficiency score of the building(this might be country specific).
 The network is trained using backpropagation. The desired values are obtained from historical data from past years. The activation function of hidden layer neurons will be sigmoid, so normalizing input variables to the range 0-1 so they match the dynamic range of the activation function will speed up training. The input data will be split into training, validation and test sets (50/75/75). During training the error on the validation set will be monitored and used as a stopping criteria. Size and number of hidden layers need to be determined experimentally. If desired accuracy isn't achieved then regularisation can be used in training. 
-\subsection*{How the network would handle significant changes to building or environment}
+\subsection{How the network would handle significant changes to building or environment}
 The energy consumption inputs of the network depend on the building they were measured in, so changes in building might affect the performance of the network significantly. The data we have for training should cover the range of buildings and climate zones, where we want the network to be deployed afterwards. The energy efficiency input, as mentioned might be country specific and might have different ranges, or categories. We can overcome this by normalising the values for different efficiency scales to the range 0-1. However the scales might differ in their criterion for determining energy efficiency. If this is the case the network won't generalise well in the different countries. If none of these approaches gives sensible results, more domain knowledge of the problem might be required to select more suitable inputs.
 
 
-\section*{Abnormality detection in the operation of HVAC systems}
+\section{Abnormality detection in the operation of HVAC systems}
 Early detection of faults in an HVAC system could significantly decrease maintenance costs. Research in abnormality detection in HVAC sensor data has previously shown good results \cite{Narayanaswamy2014}. The proposed neural network architecture follows the one used in \cite{wrro89505}.
-\subsection*{Technical features of the architecture}
+\subsection{Technical features of the architecture}
 %The chosen architecture is a binary Correlation Matrix Memory. Binary CMMs are single layer neural network with binary inputs and weights, which use the Hebbian learning rule. They store associations between input and output patterns by setting the wights of connections, betweeen input bits equal to 1 and output bits equal to 1, to 1. Recall is done by multIn order to be used as a classifier the output of the CMM needs to be thresholded. 
 
 Binary CMMs are single layer neural networks, which use the Hebbian learning rule. They consist of a single weight matrix which stores correlations between input and output patterns. Learning is done by computing the outer product of the binary input and output and adding it to the outer products of all other stored patterns to form the weight matrix. Recall of a stored pattern is done by multiplying the weight matrix and the input. The result from a recall is real valued. In order to obtain the associated binary output pattern, the output needs to be threasholded. A Wilshaw threashold is chosen for this architecture where each value in the recalled vector is compared to the number of bits, set to one in the input, and is set to one if it's greater and to 0 otherwise. Real valued inputs also need to be encoded. We to this by a binning procedure, where we choose bins for certain ranges of the input and associate a binary pattern to that bin. After all inputs have been binned they are concatenated to form the input to the CMM. 
-\subsection*{Suitability of the architecture for your application}
+\subsection{Suitability of the architecture for your application}
 A hardware implementation of CMM can be very fast. Store and recall are both very fast operations. This means we can monitor HVAC systems operation in real time and discover abnormal behaviour as soon as it occurs. This makes our chosen architecture very suitable for the particular problem.
-\subsection*{Source of data, and how the network might be trained}
+\subsection{Source of data, and how the network might be trained}
 The source of data will be sensors, part of the building managment system, which monitor different aspects of the HVAC system operation. Sensors could be placed in each individual room in order to help localise faults easier. The sensor measurements we will use as inputs are energy consumption, airflow, supply water temperature. Sensor readings are taken at discrete time intervals to form our training input vectors. A significant amount of data might be required in order to achieve good generalisation and performance. We decide to monitor normal operation of the HVAC system for 24 hours during 4 days of the year in different weather conditions and temperatures. The network is trained by applying the described binning and concatenation operation to different input vectors and storing them in the CMM. Detecting abnomalities is done by recalling patterns in real time and comparing how similar they are to known patterns using k-nearest neighbour algorithm. The tolerated level of simmilarity can be adjusted by using a smaller threashold at the outputs during recall and requires either domain knowledge or experimentation. If the achieved performance is not satisfactory domain knowledge can also be used in determining appropriate input variables and sizes of bins.
-\subsection*{How the network would handle significant changes to building or environment}
+\subsection{How the network would handle significant changes to building or environment}
 The CMMs susceptibility to change of building or environment depends on the training examples. Given enough training data for different buildings in different environmental conditions the network will show good generalisation. On the other hand network can be trained over time by storing input patterns which prove to be false alarms. These patterns have to be stored manually by maintenance staff of the building for example.
 
 \bibliographystyle{plain}
@@ -433,22 +430,22 @@ The CMMs susceptibility to change of building or environment depends on the trai
 
 
 
-\section*{Data import script}
+\section{Data import script}
 \lstinputlisting[caption=getData.m, label = listing:data]{../getData.m}
 
 \pagebreak
 
-\section*{Network creation script}
+\section{Network creation script}
 \lstinputlisting[caption=RBFN.m, label = listing:rbfn]{../rbnet.m}
 
 \pagebreak
 
-\section*{Network experimentation script}
+\section{Network experimentation script}
 \lstinputlisting[caption=runRBFN.m, label = listing:runrbfn]{../rbnetsearch.m}
 
 \pagebreak
 
-\section*{Transformation settings}
+\section{Transformation settings}
 \begin{table}[h]
 \csvautotabular{../trans1.csv}
 \caption{mapstd transformation settings}
@@ -485,7 +482,7 @@ nochange = 0      &          &          &          &          &          & -0.53
 \end{table}
 
 
-\section*{Results from experimentation}
+\section{Results from experimentation}
 \begin{table}[!ht]
 \csvautotabular{../MeanTestResults5-60.csv}
 \caption{Test results for $m = 5,15,20,25,30,40,50,60$ and $\epsilon = 1$, 10 runs}
